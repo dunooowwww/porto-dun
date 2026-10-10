@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\SiteSetting;
+use App\Support\ImageVariants;
 use Illuminate\Support\Facades\Storage;
 
 if (! function_exists('setting')) {
@@ -41,5 +42,15 @@ if (! function_exists('upload_image_size')) {
         $size = @getimagesize(Storage::disk('uploads')->path($path));
 
         return $size ? [$size[0], $size[1]] : null;
+    }
+}
+
+if (! function_exists('upload_srcset')) {
+    /**
+     * Atribut srcset untuk gambar upload (varian 480/960/1600px). Null jika belum ada varian.
+     */
+    function upload_srcset(?string $path): ?string
+    {
+        return ImageVariants::srcset($path);
     }
 }

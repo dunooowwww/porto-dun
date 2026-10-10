@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\DeletesUploadedFiles;
 use App\Models\Concerns\FlushesSiteCache;
+use App\Models\Concerns\HasResponsiveImages;
 use Database\Factories\ProjectImageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProjectImage extends Model
 {
     /** @use HasFactory<ProjectImageFactory> */
-    use DeletesUploadedFiles, FlushesSiteCache, HasFactory;
+    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasResponsiveImages;
 
     protected function casts(): array
     {

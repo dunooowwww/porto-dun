@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use App\Support\ImageVariants;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -39,6 +40,7 @@ trait DeletesUploadedFiles
     {
         if (filled($path)) {
             Storage::disk('uploads')->delete($path);
+            ImageVariants::delete($path);
         }
     }
 }

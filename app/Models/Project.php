@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ProjectStatus;
 use App\Models\Concerns\DeletesUploadedFiles;
 use App\Models\Concerns\FlushesSiteCache;
+use App\Models\Concerns\HasResponsiveImages;
 use App\Models\Concerns\HasSortOrder;
 use Database\Factories\ProjectFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -23,7 +24,7 @@ use Illuminate\Support\Str;
 class Project extends Model
 {
     /** @use HasFactory<ProjectFactory> */
-    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasSortOrder;
+    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasResponsiveImages, HasSortOrder;
 
     protected $attributes = [
         'status' => 'draft',

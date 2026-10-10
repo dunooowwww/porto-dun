@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ExperienceType;
 use App\Models\Concerns\DeletesUploadedFiles;
 use App\Models\Concerns\FlushesSiteCache;
+use App\Models\Concerns\HasResponsiveImages;
 use App\Models\Concerns\HasSortOrder;
 use Database\Factories\ExperienceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -19,7 +20,7 @@ use Illuminate\Support\Carbon;
 class Experience extends Model
 {
     /** @use HasFactory<ExperienceFactory> */
-    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasSortOrder;
+    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasResponsiveImages, HasSortOrder;
 
     protected function casts(): array
     {

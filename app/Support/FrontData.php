@@ -26,6 +26,7 @@ class FrontData
                 'title' => $card->title,
                 'body' => $card->body,
                 'image' => $card->image_url,
+                'srcset' => upload_srcset($card->image),
                 'size' => upload_image_size($card->image),
             ])
             ->all());
@@ -70,6 +71,7 @@ class FrontData
                 'tech' => $project->tech_stack ?? [],
                 'year' => $project->year,
                 'thumbnail' => $project->thumbnail_url,
+                'srcset' => upload_srcset($project->thumbnail),
                 'size' => upload_image_size($project->thumbnail),
             ])
             ->all());

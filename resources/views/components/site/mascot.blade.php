@@ -16,7 +16,7 @@
                 <x-site.icon name="x" class="size-3.5" />
             </button>
         </div>
-        <img src="{{ asset('images/mascot-head.webp') }}" width="287" height="278" loading="lazy" decoding="async"
+        <img src="{{ asset('images/mascot-head-160.webp') }}" width="160" height="155" loading="lazy" decoding="async"
              alt="Kepala maskot {{ setting('display_name') }} bertopi #{{ setting('racing_number', 12) }}"
              class="size-14 shrink-0 rounded-pill border border-line bg-card object-contain p-1 md:size-20">
     </aside>

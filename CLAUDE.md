@@ -61,7 +61,10 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - `setting('key', $default)` (di `app/helpers.php`) membaca `site_settings` dari cache; cache otomatis dibuang
   saat `SiteSetting` disimpan/dihapus. Ubah setting lewat `SiteSetting::set('key', $value)`, bukan query mentah.
 - File upload: simpan path relatif di disk `uploads` (contoh `pit-wall/ai-ml.webp`), tampilkan dengan `upload_url($path)`
-  atau accessor model (`image_url`, `thumbnail_url`, `logo_url`, `url`).
+  atau accessor model (`image_url`, `thumbnail_url`, `logo_url`, `url`). URL disk sengaja relatif (`/uploads/...`),
+  tidak bergantung `APP_URL`; untuk URL absolut (OG image) bungkus dengan `url()`.
+- Gambar responsif: trait `HasResponsiveImages` membuat varian WebP 480/960/1600px (GD) saat gambar disimpan;
+  pakai `srcset="{{ upload_srcset($path) }}"` + `sizes`. Gambar lama: `php artisan images:variants`.
 - `Experience`: `duration_label` ("1 thn 3 bln", bulan kalender inklusif), `period_label` ("Agt 2023 – sekarang").
 - `Project`: slug otomatis & unik dari judul, `published_at` terisi saat pertama terbit, scope `published()`.
 - Seeder mengisi dari `_bahan/konten.md`. Data faktual yang belum ada = `[ISI NANTI]`, link/email/tanggal/angka = null.
@@ -118,6 +121,16 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Rate limit manual 3 kiriman berhasil / 10 menit per IP (`RateLimiter`, key `contact:{ip}`); gagal validasi tidak dihitung.
   Di hosting di balik proxy/Cloudflare, atur `trustProxies` agar `$request->ip()` benar.
 - Email ke `setting('contact_email')` hanya jika `MAIL_MAILER` bukan `log`/`array`; error kirim → `report()` saja.
+
+## SEO, performa, aksesibilitas (M8)
+- `/sitemap.xml` & `/robots.txt` dinamis (`SeoController`); jangan buat file statis `public/robots.txt` (akan menang).
+- Favicon dari kepala maskot: `public/favicon.ico`, `images/favicon-32.png`, `images/apple-touch-icon.png`.
+  OG default `images/og-default.jpg` (1200×630). Widget maskot memakai `images/mascot-head-160.webp`.
+- Layout mem-preload font Archivo & Inter (latin) lewat `Vite::asset(...)`.
+- `public/.htaccess` berisi kompresi (mod_deflate) & cache 1 tahun untuk /build (nama ber-hash).
+- Ikon `brand-*` (logo merek asli) DILARANG untuk konten: `Icon::allowedForContent()` + validasi admin.
+- Item grid yang berisi teks panjang (URL) wajib `min-w-0`, kalau tidak HP 360px bisa scroll horizontal.
+- Test wajib PRD §12 ada di `tests/Feature/PrdAcceptanceTest.php`.
 
 ## Catatan front-end
 - Fokus keyboard: aturan `:focus-visible` sengaja di luar `@layer` di app.css (utilitas Tailwind v4 menang atas

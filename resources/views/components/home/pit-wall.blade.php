@@ -37,6 +37,7 @@
 
                         @if ($card['image'])
                             <img src="{{ $card['image'] }}"
+                                 @if ($card['srcset']) srcset="{{ $card['srcset'] }}" sizes="14rem" @endif
                                  @if ($card['size']) width="{{ $card['size'][0] }}" height="{{ $card['size'][1] }}" @endif
                                  loading="lazy"
                                  decoding="async"
