@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ExperienceCategory;
 use App\Enums\ExperienceType;
 use App\Models\Concerns\DeletesUploadedFiles;
 use App\Models\Concerns\FlushesSiteCache;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-#[Fillable(['organization', 'role', 'type', 'started_at', 'ended_at', 'achievement', 'logo', 'sort', 'is_active'])]
+#[Fillable(['organization', 'role', 'type', 'category', 'started_at', 'ended_at', 'achievement', 'logo', 'sort', 'is_active'])]
 class Experience extends Model
 {
     /** @use HasFactory<ExperienceFactory> */
@@ -26,6 +27,7 @@ class Experience extends Model
     {
         return [
             'type' => ExperienceType::class,
+            'category' => ExperienceCategory::class,
             'started_at' => 'date',
             'ended_at' => 'date',
             'sort' => 'integer',

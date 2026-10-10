@@ -233,7 +233,7 @@ class ManageSiteSettings extends Page
             ->icon(Heroicon::OutlinedSquares2x2)
             ->schema([
                 $section('Pit Wall', 'pit_wall', 'Section About (bento grid 4 kartu).'),
-                $section('Race Progress', 'race', 'Section timeline perjalanan.'),
+                $section('Race Progress', 'race', 'Section chart Race Strategy (pengalaman profesional & organisasi).'),
                 $section('Garage', 'garage', 'Section daftar project.'),
                 $section('Box, Box', 'contact', 'Section kontak & form.'),
             ]);

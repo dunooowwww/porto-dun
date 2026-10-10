@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Experiences\Schemas;
 
+use App\Enums\ExperienceCategory;
 use App\Enums\ExperienceType;
 use App\Filament\Support\Upload;
 use Filament\Forms\Components\DatePicker;
@@ -9,6 +10,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 class ExperienceForm
@@ -32,6 +35,18 @@ class ExperienceForm
                     ->label('Jenis')
                     ->options(ExperienceType::class)
                     ->required()
+                    ->native(false)
+                    ->live()
+                    ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        // Isi kategori otomatis dari jenis (tetap bisa diubah manual).
+                        $type = $state instanceof ExperienceType ? $state : ExperienceType::tryFrom((string) $state);
+                        $set('category', $type?->defaultCategory()?->value);
+                    }),
+                Select::make('category')
+                    ->label('Kategori')
+                    ->options(ExperienceCategory::class)
+                    ->placeholder('Tidak tampil di chart')
+                    ->helperText('Profesional → tab "Main race", Organisasi → tab "Sprint". Kosongkan untuk Pendidikan, Lomba, Sertifikasi.')
                     ->native(false),
                 Toggle::make('is_active')
                     ->label('Aktif (tampil di website)')

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Experiences\Tables;
 
+use App\Enums\ExperienceCategory;
 use App\Enums\ExperienceType;
 use App\Models\Experience;
 use Filament\Actions\BulkActionGroup;
@@ -37,6 +38,11 @@ class ExperiencesTable
                     ->label('Jenis')
                     ->badge()
                     ->placeholder('Belum diisi'),
+                TextColumn::make('category')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color('gray')
+                    ->placeholder('Tidak di chart'),
                 TextColumn::make('period_label')
                     ->label('Periode')
                     ->description(fn (Experience $record) => $record->duration_label)
@@ -49,6 +55,9 @@ class ExperiencesTable
                 SelectFilter::make('type')
                     ->label('Jenis')
                     ->options(ExperienceType::class),
+                SelectFilter::make('category')
+                    ->label('Kategori')
+                    ->options(ExperienceCategory::class),
                 TernaryFilter::make('is_active')
                     ->label('Aktif'),
             ])

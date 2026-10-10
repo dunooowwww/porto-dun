@@ -48,6 +48,9 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - `resources/views/components/site/` — `navbar` (Alpine `navbar()`), `footer` (di layout, semua halaman),
   `mascot` (Alpine `mascot()`, hanya halaman depan lewat slot `floating`), `icon`
 - `resources/views/errors/404.blade.php` — halaman "DNF – Did Not Find" (teks dari Pengaturan Situs)
+- `resources/views/components/home/race.blade.php` — chart Race Strategy: tab Alpine `raceTabs` (pola tab ARIA)
+  "Main race · Profesional" / "Sprint · Organisasi", data dari `FrontData::raceStrategy()` (rentang tahun & posisi bar
+  dalam persen per tab, cache per bulan). Desktop = chart, HP = kartu vertikal; mobil kecil = komponen `race-car`.
 - `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `race`, `garage`, `box-box`
   (+ `field-error`, `contact-success`), `section-heading`
 - `App\Support\Sections::NAV` — id section ↔ label menu (dipakai navbar & maskot)
@@ -68,6 +71,9 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - Gambar responsif: trait `HasResponsiveImages` membuat varian WebP 480/960/1600px (GD) saat gambar disimpan;
   pakai `srcset="{{ upload_srcset($path) }}"` + `sizes`. Gambar lama: `php artisan images:variants`.
 - `Experience`: `duration_label` ("1 thn 3 bln", bulan kalender inklusif), `period_label` ("Agt 2023 – sekarang").
+- `Experience.category` (`ExperienceCategory`: professional/organizational) untuk chart Race Strategy.
+  `ExperienceType::defaultCategory()`: Magang/Kerja → professional, Organisasi/Kepanitiaan → organizational,
+  Pendidikan/Lomba/Sertifikasi → null (tidak tampil di chart). Form admin mengisi kategori otomatis dari jenis.
 - `Project`: slug otomatis & unik dari judul, `published_at` terisi saat pertama terbit, scope `published()`.
 - Seeder mengisi dari `_bahan/konten.md`. Data faktual yang belum ada = `[ISI NANTI]`, link/email/tanggal/angka = null.
   Jangan mengarang data. Seeder aman dijalankan ulang (tidak menimpa editan admin).
