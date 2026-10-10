@@ -90,6 +90,7 @@
         @if ($project->thumbnail_url)
             @php $thumbSize = upload_image_size($project->thumbnail); @endphp
             <img src="{{ $project->thumbnail_url }}"
+                 @if ($thumbSrcset = upload_srcset($project->thumbnail)) srcset="{{ $thumbSrcset }}" sizes="(min-width: 1200px) 1136px, calc(100vw - 32px)" @endif
                  @if ($thumbSize) width="{{ $thumbSize[0] }}" height="{{ $thumbSize[1] }}" @endif
                  fetchpriority="high"
                  alt="Tampilan project {{ $project->title }}"
@@ -136,6 +137,7 @@
                                     @php $size = upload_image_size($image->path); @endphp
                                     <figure>
                                         <img src="{{ $image->url }}"
+                                             @if ($gallerySrcset = upload_srcset($image->path)) srcset="{{ $gallerySrcset }}" sizes="(min-width: 768px) 440px, calc(100vw - 32px)" @endif
                                              @if ($size) width="{{ $size[0] }}" height="{{ $size[1] }}" @endif
                                              loading="lazy" decoding="async"
                                              alt="{{ $image->caption ?: 'Screenshot '.$loop->iteration.' project '.$project->title }}"

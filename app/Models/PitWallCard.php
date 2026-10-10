@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\DeletesUploadedFiles;
 use App\Models\Concerns\FlushesSiteCache;
+use App\Models\Concerns\HasResponsiveImages;
 use App\Models\Concerns\HasSortOrder;
 use Database\Factories\PitWallCardFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 class PitWallCard extends Model
 {
     /** @use HasFactory<PitWallCardFactory> */
-    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasSortOrder;
+    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasResponsiveImages, HasSortOrder;
 
     /** Bento grid Pit Wall maksimal 4 kartu aktif (PRD A3). */
     public const MAX_ACTIVE = 4;

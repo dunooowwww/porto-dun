@@ -37,6 +37,7 @@
                             <div class="hidden md:block">
                                 @if ($project['thumbnail'])
                                     <img src="{{ $project['thumbnail'] }}"
+                                         @if ($project['srcset']) srcset="{{ $project['srcset'] }}" sizes="88px" @endif
                                          @if ($project['size']) width="{{ $project['size'][0] }}" height="{{ $project['size'][1] }}" @endif
                                          loading="lazy" decoding="async"
                                          alt="Thumbnail project {{ $project['title'] }}"

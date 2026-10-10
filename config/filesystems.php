@@ -49,10 +49,12 @@ return [
 
         // Upload dari admin & gambar seeder. Disimpan langsung di public/uploads supaya bisa diakses
         // tanpa `php artisan storage:link` (banyak shared hosting memblokir symlink).
+        // URL sengaja relatif (/uploads/...) supaya gambar tetap tampil walau APP_URL beda
+        // (www vs tanpa www, http vs https). Untuk URL absolut (OG image) bungkus dengan url().
         'uploads' => [
             'driver' => 'local',
             'root' => public_path('uploads'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/uploads',
+            'url' => '/uploads',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

@@ -193,10 +193,12 @@ class ManageSiteSettings extends Page
                             ->maxLength(40),
                         TextInput::make('icon')
                             ->label('Nama ikon (opsional)')
-                            ->helperText('Nama ikon dari tabler.io/icons, misalnya "brand-python". Kosongkan untuk teks saja.')
+                            ->helperText('Nama ikon garis dari tabler.io/icons, misalnya "database" atau "code". Ikon logo merek (brand-…) tidak diizinkan. Kosongkan untuk teks saja.')
                             ->maxLength(60)
                             ->rule(fn () => function (string $attribute, mixed $value, Closure $fail) {
-                                if (filled($value) && ! Icon::exists($value)) {
+                                if (filled($value) && str_starts_with($value, 'brand-')) {
+                                    $fail('Ikon logo merek tidak diizinkan (design.md: dilarang memakai logo merek asli). Pakai ikon garis biasa atau kosongkan.');
+                                } elseif (filled($value) && ! Icon::exists($value)) {
                                     $fail('Ikon "'.$value.'" tidak ditemukan. Cek ejaan namanya di tabler.io/icons.');
                                 }
                             }),

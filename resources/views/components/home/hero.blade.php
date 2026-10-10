@@ -47,7 +47,7 @@
                 <ul class="mt-8 flex flex-wrap gap-2" aria-label="Tech yang aku pakai">
                     @foreach ($techs as $tech)
                         <li class="label-mono flex items-center gap-2 rounded-chip border border-line bg-card px-3 py-2 text-ink">
-                            @if (filled($tech['icon'] ?? null))
+                            @if (\App\Support\Icon::allowedForContent($tech['icon'] ?? null))
                                 <x-site.icon :name="$tech['icon']" class="size-4" />
                             @endif
                             {{ $tech['name'] }}

@@ -27,6 +27,15 @@ class Icon
         return false;
     }
 
+    /**
+     * Ikon yang boleh dipilih di admin untuk konten (chip tech di hero).
+     * Ikon "brand-*" adalah logo merek asli → dilarang design.md bagian 7.
+     */
+    public static function allowedForContent(?string $name): bool
+    {
+        return static::exists($name) && ! str_starts_with((string) $name, 'brand-');
+    }
+
     public static function render(string $name, string $class = ''): HtmlString
     {
         if (! static::exists($name)) {

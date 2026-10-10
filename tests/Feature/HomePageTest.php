@@ -75,15 +75,15 @@ class HomePageTest extends TestCase
     public function test_tech_icons_render_valid_icons_only(): void
     {
         SiteSetting::set('hero_tech_icons', [
-            ['name' => 'Laravel', 'icon' => 'brand-laravel'],
+            ['name' => 'Database', 'icon' => 'database'],
             ['name' => 'Rahasia', 'icon' => 'tidak-ada-ikonnya'],
         ]);
 
-        $html = $this->get('/')->assertSee('Laravel')->assertSee('Rahasia')->getContent();
+        $html = $this->get('/')->assertSee('Database')->assertSee('Rahasia')->getContent();
 
         preg_match('/<ul[^>]*aria-label="Tech yang aku pakai">(.*?)<\/ul>/s', $html, $techList);
         $this->assertSame(1, substr_count($techList[1] ?? '', '<svg'), 'Hanya ikon yang valid yang dirender');
-        $this->assertTrue(Icon::exists('brand-laravel'));
+        $this->assertTrue(Icon::exists('database'));
         $this->assertFalse(Icon::exists('tidak-ada-ikonnya'));
         $this->assertFalse(Icon::exists('../../etc/passwd'));
     }
@@ -130,6 +130,12 @@ class HomePageTest extends TestCase
 
         Livewire::test(ManageSiteSettings::class)
             ->fillForm(['hero_tech_icons' => [['name' => 'Laravel', 'icon' => 'laravell']]])
+            ->call('save')
+            ->assertHasFormErrors();
+
+        // Ikon logo merek dilarang (design.md bagian 7).
+        Livewire::test(ManageSiteSettings::class)
+            ->fillForm(['hero_tech_icons' => [['name' => 'Laravel', 'icon' => 'brand-laravel']]])
             ->call('save')
             ->assertHasFormErrors();
     }
