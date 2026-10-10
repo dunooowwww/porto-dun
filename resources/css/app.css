@@ -246,7 +246,7 @@
    Kartu berlapis: [data-tilt-frame] → [data-tilt-layer] "terangkat" (translateZ) saat miring.
    preserve-3d harus ada di setiap lapisan; jangan beri overflow-hidden di kartu/bingkai (membuat datar lagi). */
 .tilt {
-    transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
     transform-style: preserve-3d;
     transition:
         transform 500ms var(--ease-out-race),
@@ -270,10 +270,11 @@
         box-shadow 500ms var(--ease-out-race);
 }
 
+/* Panel dalam "lepas" dari bingkai: maju (Z) + bergeser ke kiri-atas, bingkai abu terlihat seperti alas di belakangnya. */
 .tilt.is-tilting [data-tilt-layer] {
-    transform: translateZ(36px);
-    /* Bayangan sangat halus dari token ink (design.md §4). */
-    box-shadow: 0 22px 40px -24px color-mix(in srgb, var(--color-ink) 40%, transparent);
+    transform: translate3d(-8px, -10px, 64px);
+    /* Bayangan halus dari token ink (design.md §4). */
+    box-shadow: 0 28px 48px -26px color-mix(in srgb, var(--color-ink) 45%, transparent);
 }
 
 .tilt [data-tilt-depth] {

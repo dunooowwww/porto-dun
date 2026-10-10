@@ -28,7 +28,7 @@
                     {{-- Kartu berlapis: luar = judul, dalam = bingkai abu + panel putih berisi teks & maskot.
                          Saat di-hover (mouse), kartu miring dan panel dalam "terangkat" keluar (lihat .tilt di app.css). --}}
                     <article data-reveal data-tilt style="--reveal-delay: {{ min($i + 1, 6) * 60 }}ms" @class([
-                        'group flex flex-col gap-5 rounded-card border border-line bg-bg p-3 md:min-h-80 transition duration-300 ease-out-race hover:border-red/40',
+                        'group flex flex-col gap-5 rounded-card border border-line bg-bg p-3 transition duration-300 ease-out-race hover:border-red/40',
                         $spanClass[$spans[$i] ?? 1],
                     ])>
                         <header class="px-3 pt-3 md:px-5 md:pt-5">
@@ -37,26 +37,35 @@
                         </header>
 
                         <div data-tilt-frame class="flex grow rounded-card bg-line/60 p-1.5">
+                            {{-- Panel padat ala portoanam, maskot besar menempel di dasar panel:
+                                 kartu lebar (mulai sm) → teks kiri-bawah, maskot absolute di kanan;
+                                 kartu sempit & semua kartu di HP → teks di atas, maskot di bawahnya (rata kanan). --}}
                             <div data-tilt-layer @class([
-                                'flex grow flex-col justify-end gap-4 rounded-card border border-line bg-card p-5 md:p-6',
-                                'sm:flex-row sm:items-end sm:justify-between' => $wide,
+                                'relative flex min-h-60 grow flex-col overflow-hidden rounded-card border border-line bg-card p-5 md:min-h-64 md:p-6',
+                                'sm:justify-end' => $wide,
                             ])>
+                                <p @class([
+                                    'relative z-10 text-sm leading-relaxed font-semibold text-ink md:text-[0.9375rem]',
+                                    'max-w-xs sm:max-w-[55%] md:max-w-sm' => $wide,
+                                    'max-w-xs' => ! $wide,
+                                ])>
+                                    <span class="marker">{{ $card['body'] }}</span>
+                                </p>
+
                                 @if ($card['image'])
                                     <img src="{{ $card['image'] }}"
-                                         @if ($card['srcset']) srcset="{{ $card['srcset'] }}" sizes="14rem" @endif
+                                         @if ($card['srcset']) srcset="{{ $card['srcset'] }}" sizes="16rem" @endif
                                          @if ($card['size']) width="{{ $card['size'][0] }}" height="{{ $card['size'][1] }}" @endif
                                          loading="lazy"
                                          decoding="async"
                                          alt="Maskot {{ setting('display_name') }} dalam pose {{ $card['title'] }}"
                                          data-tilt-depth
                                          @class([
-                                             'h-36 w-auto self-end object-contain md:h-44',
-                                             'sm:order-last' => $wide,
+                                             'pointer-events-none mt-auto -mr-1 -mb-5 h-48 w-auto self-end object-contain object-right-bottom pt-4 md:-mb-6 md:h-56',
+                                             // Mulai sm (kartu lebar benar-benar lebar): maskot absolute di kanan, setinggi panel.
+                                             'sm:absolute sm:right-6 sm:bottom-0 sm:m-0 sm:h-[92%] sm:max-h-[17.5rem] sm:max-w-[45%] sm:pt-0 md:m-0 md:h-[92%]' => $wide,
                                          ])>
                                 @endif
-                                <p class="max-w-md font-medium text-ink">
-                                    <span class="marker">{{ $card['body'] }}</span>
-                                </p>
                             </div>
                         </div>
                     </article>
