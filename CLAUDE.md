@@ -77,6 +77,11 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - `Project`: slug otomatis & unik dari judul, `published_at` terisi saat pertama terbit, scope `published()`.
 - Seeder mengisi dari `_bahan/konten.md`. Data faktual yang belum ada = `[ISI NANTI]`, link/email/tanggal/angka = null.
   Jangan mengarang data. Seeder aman dijalankan ulang (tidak menimpa editan admin).
+- Data asli dari CV & portofolio ada di `CvContentSeeder` (dipanggil `DatabaseSeeder` sebelum Experience/ProjectSeeder):
+  kontak, CV, 12 pengalaman, 7 project + galeri, teks kartu Pit Wall. File-nya (CV PDF, screenshot WebP) di
+  `database/seeders/files/` dan disalin ke disk `uploads`. Menghapus placeholder `[ISI NANTI]`; pengaturan hanya diisi
+  kalau masih kosong/placeholder/nilai bawaan. Di hosting cukup `php artisan db:seed --force`.
+  Catatan: project/pengalaman bawaan yang dihapus di admin akan muncul lagi kalau seeder dijalankan ulang.
 
 ## Admin Filament (M3)
 - Panel: `app/Providers/Filament/AdminPanelProvider.php` — brand "Dun #12", palet merah manual (600 = #E10600,

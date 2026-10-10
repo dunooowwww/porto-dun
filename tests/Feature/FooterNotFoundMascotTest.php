@@ -35,6 +35,8 @@ class FooterNotFoundMascotTest extends TestCase
 
     public function test_footer_falls_back_to_display_name_when_full_name_is_placeholder(): void
     {
+        SiteSetting::set('full_name', '[ISI NANTI]');
+
         $this->get('/')->assertSee('© '.now()->year.' Dun')->assertDontSee('© '.now()->year.' [ISI NANTI]');
     }
 

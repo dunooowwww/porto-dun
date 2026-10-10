@@ -90,7 +90,7 @@ class AdminPanelTest extends TestCase
         $this->assertSame('Mahasiswa SI di siang hari, ngulik AI sampai lights out.', setting('hero_tagline'));
 
         Livewire::test(ManageSiteSettings::class)
-            ->assertFormSet(['display_name' => 'Dun', 'full_name' => '[ISI NANTI]'])
+            ->assertFormSet(['display_name' => 'Dun', 'full_name' => 'Ardan Haryanto Putra'])
             ->fillForm([
                 'full_name' => 'Dun Test',
                 'hero_tagline' => 'Tagline baru',

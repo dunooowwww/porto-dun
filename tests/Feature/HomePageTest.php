@@ -86,6 +86,8 @@ class HomePageTest extends TestCase
 
     public function test_download_cv_button_only_appears_when_cv_exists(): void
     {
+        SiteSetting::set('cv_path', null);
+
         $this->get('/')->assertDontSee('Download CV');
         $this->get('/cv')->assertNotFound();
 
