@@ -303,48 +303,17 @@
     }
 }
 
-/* Race Progress: bar stint "tumbuh" dari kiri saat chart terlihat dan setiap ganti tab
-   (panel x-show berganti display → animasi CSS otomatis diulang). Kelas dipasang raceTabs. */
-.race-js .race-bar {
-    scale: 0 1;
-    transform-origin: left center;
-}
-
-.race-js.race-live .race-bar {
-    animation: bar-grow 700ms var(--ease-out-race) both;
-    animation-delay: calc(var(--i, 0) * 90ms + 150ms);
-}
-
-@keyframes bar-grow {
-    from {
-        scale: 0 1;
-    }
-
-    to {
-        scale: 1 1;
-    }
-}
-
-/* Titik merah stint yang masih berjalan: cincin berdenyut pelan (telemetri "live"). */
-.live-dot::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    border: 2px solid var(--color-red);
-    animation: live-ring 1.8s var(--ease-out-race) infinite;
-}
-
-@keyframes live-ring {
-    from {
-        opacity: 0.7;
-        scale: 1;
-    }
-
-    to {
-        opacity: 0;
-        scale: 2.4;
-    }
+/* Gambar maskot Race Progress sebagai latar di kanan judul: memudar ke kiri & ke bawah supaya
+   menyatu dengan latar section dan teks judul tetap terbaca. */
+.race-bg {
+    -webkit-mask-image:
+        linear-gradient(to right, transparent 0%, black 45%),
+        linear-gradient(to top, transparent 0%, black 35%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(to right, transparent 0%, black 45%),
+        linear-gradient(to top, transparent 0%, black 35%);
+    mask-composite: intersect;
 }
 
 /* Bendera checkered sukses form: naik lalu berkibar sekali. */
@@ -394,17 +363,6 @@
     .tilt [data-tilt-layer],
     .tilt [data-tilt-depth] {
         transform: none;
-    }
-
-    .race-js .race-bar,
-    .race-js.race-live .race-bar {
-        scale: 1 1;
-        animation: none;
-    }
-
-    .live-dot::after {
-        animation: none;
-        display: none;
     }
 }
 

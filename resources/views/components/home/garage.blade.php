@@ -30,20 +30,20 @@
                     @foreach ($projects as $project)
                         <li data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms" class="group relative border-b border-line px-5 py-6 transition-colors last:border-b-0 hover:bg-card md:px-6 md:py-5 {{ $columns }}">
                             <div class="flex items-center justify-between md:block">
-                                <span class="font-mono text-2xl font-bold text-ink transition-colors duration-300 group-hover:text-red-dark md:text-xl">P{{ $project['position'] }}</span>
+                                <span class="font-mono text-2xl font-bold text-ink md:text-xl">P{{ $project['position'] }}</span>
                                 <span class="label-mono text-muted md:hidden">{{ $project['year'] ?? '—' }}</span>
                             </div>
 
-                            <div class="hidden overflow-hidden rounded-chip border border-line md:block">
+                            <div class="hidden md:block">
                                 @if ($project['thumbnail'])
                                     <img src="{{ $project['thumbnail'] }}"
                                          @if ($project['srcset']) srcset="{{ $project['srcset'] }}" sizes="88px" @endif
                                          @if ($project['size']) width="{{ $project['size'][0] }}" height="{{ $project['size'][1] }}" @endif
                                          loading="lazy" decoding="async"
                                          alt="Thumbnail project {{ $project['title'] }}"
-                                         class="aspect-[4/3] w-full object-cover transition duration-500 ease-out-race group-hover:scale-110">
+                                         class="aspect-[4/3] w-full rounded-chip border border-line object-cover">
                                 @else
-                                    <div class="flex aspect-[4/3] w-full items-center justify-center bg-card text-muted">
+                                    <div class="flex aspect-[4/3] w-full items-center justify-center rounded-chip border border-line bg-card text-muted">
                                         <x-site.icon name="photo" class="size-5" />
                                     </div>
                                 @endif
@@ -74,7 +74,7 @@
                                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink after:absolute after:inset-0 hover:text-red-dark md:mt-0 md:justify-self-end"
                                aria-label="View Lap: {{ $project['title'] }}">
                                 <span class="link-grow">View Lap</span>
-                                <x-site.icon name="arrow-right" class="size-4 transition-transform duration-300 ease-out-race group-hover:translate-x-1" />
+                                <x-site.icon name="arrow-right" class="size-4" />
                             </a>
                         </li>
                     @endforeach

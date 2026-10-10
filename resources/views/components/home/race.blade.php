@@ -9,13 +9,14 @@
 
 <section id="race" aria-labelledby="race-judul" class="scroll-mt-24">
     <div class="mx-auto max-w-site px-4 py-16 md:px-8 md:py-24">
-        <div class="flex items-end justify-between gap-8">
-            <x-home.section-heading id="race-judul" :title="setting('race_title', 'Race Progress')" :intro="setting('race_intro')" />
-            {{-- Maskot dibuat besar (mendekati ukuran asli 263px) dan "menyandar" ke tepi atas kartu chart:
-                 margin bawah negatif + kartu z-10 menutupi sedikit bagian bawah gambar. --}}
-            <img src="{{ asset('images/race.webp') }}" width="263" height="311" loading="lazy" decoding="async"
-                 alt="Maskot {{ setting('display_name') }} berdiri membelakangi kamera, menghadap lintasan balap"
-                 class="relative z-0 -mb-16 w-28 shrink-0 sm:w-40 md:-mb-24 md:w-56 lg:w-64">
+        {{-- Judul di atas "banner": maskot menghadap sirkuit jadi latar di sisi kanan, memudar ke kiri & bawah (.race-bg). --}}
+        <div class="relative flex min-h-56 items-end md:min-h-[22rem]">
+            <img src="{{ asset('images/race.webp') }}" width="263" height="311" loading="lazy" decoding="async" alt=""
+                 aria-hidden="true"
+                 class="race-bg pointer-events-none absolute top-0 right-0 h-full w-auto max-w-[70%] opacity-70 md:opacity-100 object-cover object-right-top select-none">
+            <div class="relative">
+                <x-home.section-heading id="race-judul" :title="setting('race_title', 'Race Progress')" :intro="setting('race_intro')" />
+            </div>
         </div>
 
         @if (count($tabs) === 0)
@@ -23,7 +24,7 @@
                 Belum ada stint yang tercatat.
             </p>
         @else
-            <div class="relative z-10 mt-12 rounded-card border border-line bg-card p-5 md:p-8"
+            <div class="mt-12 rounded-card border border-line bg-card p-5 md:p-8"
                  x-data="raceTabs(@js($keys), @js($keys[0]))"
                  data-reveal>
                 {{-- Tab kategori (tab tanpa data tidak dirender) --}}
@@ -117,11 +118,11 @@
                                                     <span class="absolute inset-y-0 w-px bg-line" style="left: {{ $y / $yearSpan * 100 }}%"></span>
                                                 @endif
                                             @endforeach
-                                            <span class="race-bar absolute top-1/2 h-2.5 -translate-y-1/2 rounded-pill bg-ink"
-                                                  style="left: {{ $stint['left'] }}%; width: {{ $stint['width'] }}%; --i: {{ $loop->index }}">
+                                            <span class="absolute top-1/2 h-2.5 -translate-y-1/2 rounded-pill bg-ink"
+                                                  style="left: {{ $stint['left'] }}%; width: {{ $stint['width'] }}%">
                                                 @if ($stint['current'])
                                                     {{-- Masih berjalan --}}
-                                                    <span class="live-dot absolute top-1/2 -right-1.5 size-3 -translate-y-1/2 rounded-pill bg-red ring-2 ring-card"></span>
+                                                    <span class="absolute top-1/2 -right-1.5 size-3 -translate-y-1/2 rounded-pill bg-red ring-2 ring-card"></span>
                                                 @endif
                                             </span>
                                         </div>
@@ -140,9 +141,9 @@
                             <x-home.race-car class="top-[5px] -left-[8.5px] rotate-90" />
 
                             @foreach ($tab['stints'] as $stint)
-                                <li class="relative pb-6 pl-10 last:pb-0" data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms">
+                                <li class="relative pb-6 pl-10 last:pb-0">
                                     <span class="absolute top-0 bottom-0 left-[7px] w-px bg-line" aria-hidden="true"></span>
-                                    <span @class(['absolute top-1 left-0 size-4 rounded-pill bg-red ring-4 ring-card', 'live-dot' => $stint['current']]) aria-hidden="true"></span>
+                                    <span class="absolute top-1 left-0 size-4 rounded-pill bg-red ring-4 ring-card" aria-hidden="true"></span>
 
                                     <article class="group relative rounded-card border border-line bg-bg p-5 transition duration-300 ease-out-race hover:border-muted">
                                         <div class="flex flex-wrap items-center justify-between gap-2">
