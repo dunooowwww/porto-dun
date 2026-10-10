@@ -176,11 +176,8 @@ vendor/bin/pint                    # rapikan format kode PHP
   Panel padat: kartu lebar (mulai `sm`) → teks kiri-bawah + maskot `absolute` kanan setinggi panel (maks 17.5rem,
   gambar asli hanya ±274px, jangan diperbesar lagi); kartu sempit & semua kartu di HP → teks atas, maskot di bawahnya.
   Saat hover panel maju `translate3d(-8px,-10px,64px)` sehingga bingkai abu terlihat sebagai alas.
-- Gambar maskot Race (`race.webp`, asli 263px) ditampilkan besar dan "menyandar" ke tepi atas kartu chart
-  (margin bawah negatif + kartu `relative z-10`).
-- Race Progress: bar stint tumbuh dari kiri saat chart terlihat & tiap ganti tab (`.race-js`/`.race-live` dipasang
-  `raceTabs.init()`, bar `.race-bar` + `--i`); titik stint yang masih berjalan berdenyut (`.live-dot`).
-- Garage: saat baris di-hover, thumbnail zoom pelan, P1/P2… jadi merah, panah "View Lap" bergeser ke kanan.
+- Gambar maskot Race (`race.webp`, asli 263px) jadi latar di kanan judul (banner `min-h-[22rem]`), memudar ke kiri &
+  bawah lewat `.race-bg` (mask-image). Animasi Race/Garage dari PR #13 sengaja dibatalkan atas permintaan Dun.
 - Semua animasi besar dimatikan di blok `@media (prefers-reduced-motion: reduce)` di app.css + cek di JS.
 
 ## Definition of Done tiap milestone
