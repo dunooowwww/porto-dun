@@ -7,38 +7,30 @@
     $techs = collect(setting('hero_tech_icons', []))->filter(fn ($tech) => filled($tech['name'] ?? null));
     $hasCv = filled(setting('cv_path'));
 
-    // Jika nama ada di dalam sapaan ("Halo, aku Dun"), nama itulah yang diberi garis merah + #12.
-    $nameInGreeting = filled($name) && filled($greeting) && str_contains($greeting, $name);
-    $before = $nameInGreeting ? \Illuminate\Support\Str::before($greeting, $name) : $greeting;
-    $after = $nameInGreeting ? \Illuminate\Support\Str::after($greeting, $name) : null;
+    // Nama hanya tertulis sekali: bagian sapaan yang diberi garis merah + #12 (lihat App\Support\HeroName).
+    $parts = \App\Support\HeroName::split($greeting, $name);
 @endphp
 
 <section id="home" aria-labelledby="hero-judul" class="scroll-mt-0">
-    <div class="mx-auto grid max-w-site items-center gap-10 px-4 pt-28 pb-16 md:grid-cols-[1.3fr_1fr] md:gap-8 md:px-8 md:pt-40 md:pb-24">
-        <div>
+    {{-- Teks melebar, gambar berlebar tetap di kanan supaya jaraknya dekat (tidak ada kolom kosong di tengah). --}}
+    <div class="mx-auto grid max-w-site items-center gap-10 px-4 pt-28 pb-16 md:grid-cols-[minmax(0,1fr)_auto] md:gap-12 md:px-8 md:pt-36 md:pb-24 lg:gap-16">
+        <div class="min-w-0">
             @if ($eyebrow)
                 <p class="label-mono text-muted">{{ $eyebrow }}</p>
             @endif
 
-            <h1 id="hero-judul" class="mt-5 text-[clamp(3rem,11vw,6rem)] font-black">
-                @if ($nameInGreeting)
-                    {{ $before }}<x-home.hero-name :name="$name" :number="$number" />{{ $after }}
-                @else
-                    @if ($greeting)
-                        <span class="block">{{ $greeting }}</span>
-                    @endif
-                    <x-home.hero-name :name="$name" :number="$number" />
-                @endif
+            <h1 id="hero-judul" class="mt-5 text-[clamp(2.75rem,5.2vw,4rem)] font-black">
+                {{ $parts['before'] }}<x-home.hero-name :name="$parts['name']" :number="$number" />{{ $parts['after'] }}
             </h1>
 
             @if (setting('hero_tagline'))
-                <p class="mt-8 max-w-2xl font-display text-2xl leading-snug font-bold tracking-display text-ink md:text-3xl">
+                <p class="mt-4 max-w-3xl font-display text-[clamp(1.75rem,3.6vw,3rem)] leading-[1.1] font-bold tracking-display text-muted">
                     {{ setting('hero_tagline') }}
                 </p>
             @endif
 
             @if (setting('hero_description'))
-                <p class="mt-4 max-w-xl text-lg text-muted">
+                <p class="mt-6 max-w-2xl text-lg text-muted">
                     {{ setting('hero_description') }}
                 </p>
             @endif
@@ -79,6 +71,6 @@
              width="214" height="273"
              fetchpriority="high"
              alt="Maskot {{ $name }}: karakter anime berhoodie putih dan topi hitam #{{ $number }}, duduk bersila memegang laptop"
-             class="w-52 justify-self-start sm:w-60 md:w-72 md:justify-self-end">
+             class="w-52 justify-self-start sm:w-60 md:w-56 md:justify-self-end lg:w-64">
     </div>
 </section>

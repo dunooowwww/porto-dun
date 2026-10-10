@@ -51,6 +51,30 @@ class HomePageTest extends TestCase
             ->assertSee('href="#garage"', false);
     }
 
+    public function test_hero_shows_the_name_only_once(): void
+    {
+        SiteSetting::set('display_name', 'Dunnow');
+        SiteSetting::set('hero_greeting', 'Halo, kenalin aku ardan');
+
+        $html = $this->get('/')->getContent();
+        preg_match('/<h1 id="hero-judul"[^>]*>(.*?)<\/h1>/s', $html, $h1);
+
+        $this->assertStringContainsString('ardan', $h1[1]);
+        $this->assertStringNotContainsString('Dunnow', $h1[1], 'Nama tampil tidak boleh ditambahkan lagi di judul');
+        $this->assertSame(1, substr_count($h1[1], '#12'));
+    }
+
+    public function test_hero_underlines_starred_part_of_greeting(): void
+    {
+        SiteSetting::set('hero_greeting', 'Halo, aku *Ardan Putra*!');
+
+        $html = $this->get('/')->getContent();
+        preg_match('/<h1 id="hero-judul"[^>]*>(.*?)<\/h1>/s', $html, $h1);
+
+        $this->assertMatchesRegularExpression('/<span class="relative inline-block">Ardan Putra<span[^>]*bg-red/', $h1[1]);
+        $this->assertStringNotContainsString('*', $h1[1]);
+    }
+
     public function test_navbar_links_to_every_section(): void
     {
         $response = $this->get('/');

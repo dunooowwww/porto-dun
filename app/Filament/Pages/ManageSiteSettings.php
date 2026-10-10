@@ -165,6 +165,8 @@ class ManageSiteSettings extends Page
                     ->maxLength(100),
                 TextInput::make('hero_greeting')
                     ->label('Sapaan hero')
+                    ->placeholder('Halo, kenalin aku *Ardan*')
+                    ->helperText('Nama diberi garis merah + #12. Apit nama dengan bintang (*Nama*) untuk memilihnya; tanpa bintang, dipakai nama tampil (kalau ada di sapaan) atau kata terakhir.')
                     ->required()
                     ->maxLength(100),
                 TextInput::make('hero_scroll_text')

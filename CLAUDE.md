@@ -51,6 +51,8 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `race`, `garage`, `box-box`
   (+ `field-error`, `contact-success`), `section-heading`
 - `App\Support\Sections::NAV` — id section ↔ label menu (dipakai navbar & maskot)
+- `App\Support\HeroName::split()` — bagian sapaan hero yang diberi garis merah + #12 (nama hanya tertulis sekali):
+  `*bintang*` → nama tampil di dalam sapaan → kata terakhir. Jangan menambahkan `display_name` terpisah di H1.
 - `public/images/` — gambar maskot, PNG asli + WebP (pakai WebP di `<img>`):
   `hero`, `ai-ml`, `builder`, `team`, `strategy`, `race`, `garage`, `contact`, `dnf`, `mascot-head`
 - `public/uploads/` — tempat file upload dari admin (di-ignore git)
