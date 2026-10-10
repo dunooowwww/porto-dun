@@ -1,7 +1,7 @@
 {{-- Pesan sukses form kontak dengan bendera checkered (animasi menyusul di M7). --}}
 @props(['message' => null])
 <div role="status" class="flex flex-col items-start">
-    <div class="flex items-end gap-1" aria-hidden="true">
+    <div class="flag-wave flex items-end gap-1" aria-hidden="true">
         <span class="h-14 w-1 rounded-pill bg-ink"></span>
         <span class="checkered mb-6 h-8 w-12 border border-ink [--checker:8px]"></span>
     </div>

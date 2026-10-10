@@ -18,7 +18,7 @@ Kerjakan per milestone sesuai PRD bagian 11; jangan loncat ke milestone berikutn
 ## Stack
 - Laravel 13 (butuh **PHP ≥ 8.3**), Blade + komponen Blade
 - Tailwind CSS v4 via Vite (`@tailwindcss/vite`), Alpine.js
-- GSAP hanya untuk loading screen & animasi scroll (mulai M7)
+- Animasi (M7) memakai CSS + sedikit JS, **tanpa GSAP** (hemat ±27 KB gzip demi Lighthouse). Jangan tambah library animasi.
 - Filament v5 (Livewire 4) untuk admin di `/admin`
 - Database: SQLite di lokal (`database/database.sqlite`), MySQL di hosting
 - Font self-hosted via npm `@fontsource-variable/*`: Archivo (heading), Inter (body), JetBrains Mono (label)
@@ -124,6 +124,20 @@ vendor/bin/pint                    # rapikan format kode PHP
   layer base). Jangan pindahkan ke `@layer base`.
 - Section memakai `scroll-mt-24` agar judul tidak tertutup navbar; link navbar berbentuk `url('/').'#id'`.
 - Gambar upload: beri `width`/`height` (helper `upload_image_size($path)`) dan `loading="lazy"` kecuali hero.
+
+## Motion (M7) — hanya animasi ini, jangan menambah yang lain
+- Loading screen "Lights Out": `components/site/lights-script` (skrip inline di `<head>`, slot `head`) + `lights-out`
+  (overlay, slot `overlay`). Urutan lampu murni CSS (`.lights-on` di `<html>`); sekali per sesi (`sessionStorage`),
+  skip klik/Esc, dilewati jika reduced-motion. Tanpa JS kelas tak pernah dipasang → halaman tidak terkunci.
+  Keyframe overlay menulis `visibility`/`pointer-events` eksplisit di 0–80% (properti diskrit berganti di tengah keyframe).
+- Animasi masuk: beri atribut `data-reveal` (+ `style="--reveal-delay: {{ min($i, 6) * 60 }}ms"`). `.reveal-ready`
+  dipasang oleh `initReveal()` di app.js, jadi tanpa JS konten tetap tampil. Hero sengaja tidak ikut.
+- Hover kartu: `transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted`.
+  Link: utilitas `link-grow` (garis bawah merah tumbuh dari kiri; bisa dipicu `.group:hover`).
+- Mobil di lintasan Race: Alpine `raceCar` pada `<ol>`, gerak lewat properti CSS `translate` (bukan `transform`,
+  karena di HP mobil diputar dengan `rotate`).
+- Bendera sukses form: kelas `flag-wave`.
+- Semua animasi besar dimatikan di blok `@media (prefers-reduced-motion: reduce)` di app.css + cek di JS.
 
 ## Definition of Done tiap milestone
 Ikuti design.md (termasuk DILARANG), cek di lebar 360px dan 1280px, tidak ada error di console

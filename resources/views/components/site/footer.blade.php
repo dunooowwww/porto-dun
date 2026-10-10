@@ -28,7 +28,7 @@
                 <p class="label-mono text-muted">Menu</p>
                 <ul class="mt-4 space-y-2">
                     @foreach (\App\Support\Sections::NAV as $id => $label)
-                        <li><a href="{{ url('/') }}#{{ $id }}" class="text-ink hover:text-red-dark">{{ $label }}</a></li>
+                        <li><a href="{{ url('/') }}#{{ $id }}" class="link-grow text-ink">{{ $label }}</a></li>
                     @endforeach
                 </ul>
             </nav>
@@ -39,7 +39,7 @@
                     <ul class="mt-4 space-y-2">
                         @foreach ($social as $label => $href)
                             <li>
-                                <a href="{{ $href }}" class="text-ink hover:text-red-dark"
+                                <a href="{{ $href }}" class="link-grow text-ink"
                                    @if (! str_starts_with($href, 'mailto:')) target="_blank" rel="noopener noreferrer" @endif>{{ $label }}</a>
                             </li>
                         @endforeach

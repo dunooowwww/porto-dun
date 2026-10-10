@@ -6,9 +6,11 @@ use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
 use App\Models\SiteSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Tests\TestCase;
 
 class ContactFormTest extends TestCase
@@ -141,10 +143,12 @@ class ContactFormTest extends TestCase
             'mail.mailers.smtp.timeout' => 1,
         ]);
         SiteSetting::set('contact_email', 'dun@example.com');
+        Exceptions::fake(); // error tetap dicek, tapi tidak ditulis ke storage/logs
 
         $this->postJson('/kontak', $this->valid)->assertOk();
 
         $this->assertSame(1, ContactMessage::count());
+        Exceptions::assertReported(fn (TransportException $e) => str_contains($e->getMessage(), '127.0.0.1:1'));
     }
 
     public function test_contact_links_come_from_settings(): void

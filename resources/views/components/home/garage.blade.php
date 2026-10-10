@@ -28,7 +28,7 @@
 
                 <ol>
                     @foreach ($projects as $project)
-                        <li class="relative border-b border-line px-5 py-6 transition-colors last:border-b-0 hover:bg-bg md:px-6 md:py-5 {{ $columns }}">
+                        <li data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms" class="group relative border-b border-line px-5 py-6 transition-colors last:border-b-0 hover:bg-bg md:px-6 md:py-5 {{ $columns }}">
                             <div class="flex items-center justify-between md:block">
                                 <span class="font-mono text-2xl font-bold text-ink md:text-xl">P{{ $project['position'] }}</span>
                                 <span class="label-mono text-muted md:hidden">{{ $project['year'] ?? '—' }}</span>
@@ -72,7 +72,7 @@
                             <a href="{{ route('projects.show', $project['slug']) }}"
                                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink after:absolute after:inset-0 hover:text-red-dark md:mt-0 md:justify-self-end"
                                aria-label="View Lap: {{ $project['title'] }}">
-                                View Lap
+                                <span class="link-grow">View Lap</span>
                                 <x-site.icon name="arrow-right" class="size-4" />
                             </a>
                         </li>

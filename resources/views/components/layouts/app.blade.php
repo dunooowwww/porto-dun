@@ -48,8 +48,11 @@
     {{-- Meta tidak bisa membaca CSS variable; nilai ini = token "bg" di app.css. --}}
     <meta name="theme-color" content="#F7F7F5">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{ $head ?? '' }}
 </head>
 <body class="flex min-h-screen flex-col">
+    {{ $overlay ?? '' }}
+
     <a href="#konten" class="sr-only rounded-pill bg-ink text-sm font-semibold text-card focus:not-sr-only focus:px-5 focus:py-3 focus:fixed focus:top-4 focus:left-4 focus:z-[60]">
         Lewati ke konten
     </a>
