@@ -4,7 +4,9 @@ namespace App\Filament\Pages;
 
 use App\Filament\Support\Upload;
 use App\Models\SiteSetting;
+use App\Support\Icon;
 use BackedEnum;
+use Closure;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -191,8 +193,13 @@ class ManageSiteSettings extends Page
                             ->maxLength(40),
                         TextInput::make('icon')
                             ->label('Nama ikon (opsional)')
-                            ->helperText('Nama ikon Tabler, misalnya "brand-python". Kosongkan untuk teks saja.')
-                            ->maxLength(60),
+                            ->helperText('Nama ikon dari tabler.io/icons, misalnya "brand-python". Kosongkan untuk teks saja.')
+                            ->maxLength(60)
+                            ->rule(fn () => function (string $attribute, mixed $value, Closure $fail) {
+                                if (filled($value) && ! Icon::exists($value)) {
+                                    $fail('Ikon "'.$value.'" tidak ditemukan. Cek ejaan namanya di tabler.io/icons.');
+                                }
+                            }),
                     ])
                     ->columns(2)
                     ->maxItems(8)

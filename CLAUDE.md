@@ -22,7 +22,9 @@ Kerjakan per milestone sesuai PRD bagian 11; jangan loncat ke milestone berikutn
 - Filament v5 (Livewire 4) untuk admin di `/admin`
 - Database: SQLite di lokal (`database/database.sqlite`), MySQL di hosting
 - Font self-hosted via npm `@fontsource-variable/*`: Archivo (heading), Inter (body), JetBrains Mono (label)
-- Ikon: Lucide/Tabler SVG inline, stroke 1.5. Tidak boleh emoji sebagai ikon.
+- Ikon: Tabler (`secondnetwork/blade-tabler-icons`) lewat `<x-site.icon name="arrow-right" class="size-4" />`
+  → stroke 1.5, aria-hidden, nama tak dikenal tidak dirender. JANGAN pakai `<x-icon>` (milik paket blade-icons)
+  atau `<x-tabler-*>` langsung. Tidak boleh emoji sebagai ikon.
 
 ## Token desain (satu sumber)
 Semua warna, font, dan radius didefinisikan di blok `@theme` pada `resources/css/app.css`.
@@ -36,8 +38,13 @@ Palet bawaan Tailwind dimatikan (`--color-*: initial`), jadi hanya kelas ini yan
 Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `text-red-dark`.
 
 ## Struktur penting
-- `resources/views/components/layouts/app.blade.php` — layout dasar (`<x-layouts.app title="..." description="...">`)
-- `resources/views/design-test.blade.php` — halaman tes M1 di `/` (diganti Home di M4)
+- `resources/views/components/layouts/app.blade.php` — layout utama: meta SEO/OG dari `setting()` (bisa ditimpa
+  lewat props `title`, `description`, `image`), skip link, slot `header`, `<main id="konten">`
+- `resources/views/home.blade.php` + `app/Http/Controllers/HomeController.php` — halaman depan; data DB lewat `SiteCache`
+- `resources/views/components/site/` — `navbar` (Alpine `navbar()` di `resources/js/app.js`), `icon`
+- `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `section-heading`,
+  `section-stub` (kerangka sementara Race/Garage/Box Box sampai M5/M6)
+- `App\Support\Sections::NAV` — id section ↔ label menu (dipakai navbar & maskot)
 - `public/images/` — gambar maskot, PNG asli + WebP (pakai WebP di `<img>`):
   `hero`, `ai-ml`, `builder`, `team`, `strategy`, `race`, `garage`, `contact`, `dnf`, `mascot-head`
 - `public/uploads/` — tempat file upload dari admin (di-ignore git)
@@ -96,6 +103,12 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Tanpa queue worker / cron wajib. Email dikirim sinkron; kalau SMTP gagal, data tetap tersimpan.
 - Hosting harus PHP ≥ 8.3 (syarat Laravel 13) dengan ekstensi `intl`, `zip`, `gd`.
 - Produksi: `APP_ENV=production`, `APP_DEBUG=false`. Langkah deploy lengkap ada di PRD bagian 10.
+
+## Catatan front-end
+- Fokus keyboard: aturan `:focus-visible` sengaja di luar `@layer` di app.css (utilitas Tailwind v4 menang atas
+  layer base). Jangan pindahkan ke `@layer base`.
+- Section memakai `scroll-mt-24` agar judul tidak tertutup navbar; link navbar berbentuk `url('/').'#id'`.
+- Gambar upload: beri `width`/`height` (lihat `HomeController::imageSize`) dan `loading="lazy"` kecuali hero.
 
 ## Definition of Done tiap milestone
 Ikuti design.md (termasuk DILARANG), cek di lebar 360px dan 1280px, tidak ada error di console
