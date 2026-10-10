@@ -47,6 +47,17 @@ return [
             'report' => false,
         ],
 
+        // Upload dari admin & gambar seeder. Disimpan langsung di public/uploads supaya bisa diakses
+        // tanpa `php artisan storage:link` (banyak shared hosting memblokir symlink).
+        'uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/uploads',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

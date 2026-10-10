@@ -42,6 +42,18 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
   `hero`, `ai-ml`, `builder`, `team`, `strategy`, `race`, `garage`, `contact`, `dnf`, `mascot-head`
 - `public/uploads/` — tempat file upload dari admin (di-ignore git)
 
+## Data (M2)
+- Model di `app/Models`: `SiteSetting`, `PitWallCard`, `Experience`, `Project` (+ `ProjectImage`), `MascotMessage`, `ContactMessage`.
+- Enum di `app/Enums`: `ExperienceType` (Pendidikan…Sertifikasi), `ProjectStatus` (draft/published) — pakai `::options()` untuk dropdown.
+- `setting('key', $default)` (di `app/helpers.php`) membaca `site_settings` dari cache; cache otomatis dibuang
+  saat `SiteSetting` disimpan/dihapus. Ubah setting lewat `SiteSetting::set('key', $value)`, bukan query mentah.
+- File upload: simpan path relatif di disk `uploads` (contoh `pit-wall/ai-ml.webp`), tampilkan dengan `upload_url($path)`
+  atau accessor model (`image_url`, `thumbnail_url`, `logo_url`, `url`).
+- `Experience`: `duration_label` ("1 thn 3 bln", bulan kalender inklusif), `period_label` ("Agt 2023 – sekarang").
+- `Project`: slug otomatis & unik dari judul, `published_at` terisi saat pertama terbit, scope `published()`.
+- Seeder mengisi dari `_bahan/konten.md`. Data faktual yang belum ada = `[ISI NANTI]`, link/email/tanggal/angka = null.
+  Jangan mengarang data. Seeder aman dijalankan ulang (tidak menimpa editan admin).
+
 ## Perintah penting
 ```bash
 composer install && npm install          # pasang dependensi
