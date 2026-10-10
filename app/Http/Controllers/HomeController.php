@@ -16,6 +16,7 @@ class HomeController extends Controller
             'cards' => FrontData::pitWall(),
             'timeline' => FrontData::timeline(),
             'projects' => FrontData::garage(),
+            'mascot' => FrontData::mascot(),
         ]);
     }
 }

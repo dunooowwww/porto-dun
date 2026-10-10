@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Experience;
+use App\Models\MascotMessage;
 use App\Models\PitWallCard;
 use App\Models\Project;
 
@@ -71,6 +72,20 @@ class FrontData
                 'thumbnail' => $project->thumbnail_url,
                 'size' => upload_image_size($project->thumbnail),
             ])
+            ->all());
+    }
+
+    /**
+     * Bubble maskot per section: ['hero' => '…', 'pit-wall' => '…', …].
+     *
+     * @return array<string, string>
+     */
+    public static function mascot(): array
+    {
+        return SiteCache::remember('front.mascot', fn () => MascotMessage::query()
+            ->whereIn('section', array_keys(MascotMessage::SECTIONS))
+            ->pluck('message', 'section')
+            ->filter()
             ->all());
     }
 }

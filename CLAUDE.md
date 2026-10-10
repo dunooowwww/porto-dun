@@ -45,9 +45,11 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
   Posisi P1, P2, … dan navigasi sebelumnya/berikutnya mengikuti urutan `FrontData::garage()`.
 - `resources/views/projects/show.blade.php` + `ProjectController` — detail `/projects/{slug}` (route `projects.show`);
   draft hanya untuk admin login (+ `noindex`), slug salah → 404
-- `resources/views/components/site/` — `navbar` (Alpine `navbar()` di `resources/js/app.js`), `icon`
-- `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `race`, `garage`, `section-heading`,
-  `section-stub` (kerangka sementara Box Box sampai M6)
+- `resources/views/components/site/` — `navbar` (Alpine `navbar()`), `footer` (di layout, semua halaman),
+  `mascot` (Alpine `mascot()`, hanya halaman depan lewat slot `floating`), `icon`
+- `resources/views/errors/404.blade.php` — halaman "DNF – Did Not Find" (teks dari Pengaturan Situs)
+- `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `race`, `garage`, `box-box`
+  (+ `field-error`, `contact-success`), `section-heading`
 - `App\Support\Sections::NAV` — id section ↔ label menu (dipakai navbar & maskot)
 - `public/images/` — gambar maskot, PNG asli + WebP (pakai WebP di `<img>`):
   `hero`, `ai-ml`, `builder`, `team`, `strategy`, `race`, `garage`, `contact`, `dnf`, `mascot-head`
@@ -104,8 +106,18 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Aset Filament (`public/css|js|fonts/filament`) tidak masuk git; dibuat ulang otomatis oleh `composer install`
   (script `filament:upgrade`). Kalau upload manual tanpa Composer di server, ikutkan folder-folder itu.
 - Tanpa queue worker / cron wajib. Email dikirim sinkron; kalau SMTP gagal, data tetap tersimpan.
+  Untuk mengaktifkan email: isi `MAIL_MAILER=smtp` + `MAIL_HOST/PORT/USERNAME/PASSWORD/FROM_ADDRESS` di `.env`
+  dan isi Email di admin → Pengaturan Situs → Kontak.
 - Hosting harus PHP ≥ 8.3 (syarat Laravel 13) dengan ekstensi `intl`, `zip`, `gd`.
 - Produksi: `APP_ENV=production`, `APP_DEBUG=false`. Langkah deploy lengkap ada di PRD bagian 10.
+
+## Form kontak (M6)
+- `POST /kontak` → `ContactMessageController@store` + `StoreContactMessageRequest`. Tanpa JS: redirect ke `/#box-box`
+  dengan flash `contact_sent`; dengan Alpine `contactForm()`: fetch + JSON (422 untuk error validasi).
+- Honeypot field `website`: kalau terisi, respons tetap sukses tapi pesan TIDAK disimpan.
+- Rate limit manual 3 kiriman berhasil / 10 menit per IP (`RateLimiter`, key `contact:{ip}`); gagal validasi tidak dihitung.
+  Di hosting di balik proxy/Cloudflare, atur `trustProxies` agar `$request->ip()` benar.
+- Email ke `setting('contact_email')` hanya jika `MAIL_MAILER` bukan `log`/`array`; error kirim → `report()` saja.
 
 ## Catatan front-end
 - Fokus keyboard: aturan `:focus-visible` sengaja di luar `@layer` di app.css (utilitas Tailwind v4 menang atas
