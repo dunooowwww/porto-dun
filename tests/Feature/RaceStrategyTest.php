@@ -161,4 +161,20 @@ class RaceStrategyTest extends TestCase
             ->assertCanSeeTableRecords(Experience::where('category', 'organizational')->get())
             ->assertCanNotSeeTableRecords(Experience::where('category', 'professional')->get());
     }
+
+    public function test_each_stint_opens_a_detail_dialog_with_full_text(): void
+    {
+        $long = str_repeat('Pencapaian panjang yang tidak boleh terpotong. ', 6);
+        $stint = $this->stint('Perusahaan Dengan Nama Sangat Panjang Sekali', ExperienceType::Magang, '2025-01-01', '2025-06-01');
+        $stint->update(['achievement' => trim($long)]);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('<dialog id="stint-'.$stint->id.'"', false)
+            ->assertSee('aria-controls="stint-'.$stint->id.'"', false)
+            ->assertSee("openStint('stint-{$stint->id}')", false)
+            ->assertSee('Pencapaian')
+            ->assertSee(trim($long))
+            ->assertSee('aria-label="Tutup detail"', false);
+    }
 }

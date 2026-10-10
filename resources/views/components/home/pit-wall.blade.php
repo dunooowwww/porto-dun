@@ -12,12 +12,13 @@
     $spanClass = [1 => 'md:col-span-1', 2 => 'md:col-span-2', 3 => 'md:col-span-3'];
 @endphp
 
-<section id="pit-wall" aria-labelledby="pit-wall-judul" class="scroll-mt-24">
-    <div class="mx-auto max-w-site px-4 py-24 md:px-8 md:py-36">
+{{-- Section berselang-seling: latar putih (card) ↔ off-white (bg); kartu di dalamnya kebalikannya. --}}
+<section id="pit-wall" aria-labelledby="pit-wall-judul" class="scroll-mt-24 border-y border-line bg-card">
+    <div class="mx-auto max-w-site px-4 py-16 md:px-8 md:py-24">
         <x-home.section-heading id="pit-wall-judul" :title="setting('pit_wall_title', 'Pit Wall')" :intro="setting('pit_wall_intro')" />
 
         @if (count($cards) === 0)
-            <p class="mt-10 rounded-card border border-line bg-card p-8 text-muted">
+            <p class="mt-10 rounded-card border border-line bg-bg p-8 text-muted">
                 Kartu Pit Wall belum diisi.
             </p>
         @else
@@ -25,7 +26,7 @@
                 @foreach ($cards as $i => $card)
                     @php $wide = ($spans[$i] ?? 1) > 1; @endphp
                     <article data-reveal style="--reveal-delay: {{ min($i + 1, 6) * 60 }}ms" @class([
-                        'flex flex-col justify-between gap-6 overflow-hidden md:min-h-72 rounded-card border border-line bg-card p-6 md:p-8 transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted',
+                        'flex flex-col justify-between gap-6 overflow-hidden md:min-h-72 rounded-card border border-line bg-bg p-6 md:p-8 transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted',
                         $spanClass[$spans[$i] ?? 1],
                         'sm:flex-row sm:items-start' => $wide,
                     ])>

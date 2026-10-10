@@ -6,16 +6,16 @@
     $columns = 'md:grid md:grid-cols-[3.5rem_5.5rem_minmax(0,1fr)_13rem_3.5rem_7rem] md:items-center md:gap-6';
 @endphp
 
-<section id="garage" aria-labelledby="garage-judul" class="scroll-mt-24">
-    <div class="mx-auto max-w-site px-4 py-24 md:px-8 md:py-36">
+<section id="garage" aria-labelledby="garage-judul" class="scroll-mt-24 border-y border-line bg-card">
+    <div class="mx-auto max-w-site px-4 py-16 md:px-8 md:py-24">
         <x-home.section-heading id="garage-judul" :title="setting('garage_title', 'Garage')" :intro="setting('garage_intro')" />
 
         @if (count($projects) === 0)
-            <p class="mt-10 rounded-card border border-line bg-card p-8 text-muted">
+            <p class="mt-10 rounded-card border border-line bg-bg p-8 text-muted">
                 Belum ada project yang terbit.
             </p>
         @else
-            <div class="mt-12 overflow-hidden rounded-card border border-line bg-card">
+            <div class="mt-12 overflow-hidden rounded-card border border-line bg-bg">
                 {{-- Header kolom timing screen (dekoratif, hanya desktop) --}}
                 <div class="label-mono hidden border-b border-line px-6 py-4 text-muted {{ $columns }}" aria-hidden="true">
                     <span>Pos</span>
@@ -28,7 +28,7 @@
 
                 <ol>
                     @foreach ($projects as $project)
-                        <li data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms" class="group relative border-b border-line px-5 py-6 transition-colors last:border-b-0 hover:bg-bg md:px-6 md:py-5 {{ $columns }}">
+                        <li data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms" class="group relative border-b border-line px-5 py-6 transition-colors last:border-b-0 hover:bg-card md:px-6 md:py-5 {{ $columns }}">
                             <div class="flex items-center justify-between md:block">
                                 <span class="font-mono text-2xl font-bold text-ink md:text-xl">P{{ $project['position'] }}</span>
                                 <span class="label-mono text-muted md:hidden">{{ $project['year'] ?? '—' }}</span>
@@ -43,7 +43,7 @@
                                          alt="Thumbnail project {{ $project['title'] }}"
                                          class="aspect-[4/3] w-full rounded-chip border border-line object-cover">
                                 @else
-                                    <div class="flex aspect-[4/3] w-full items-center justify-center rounded-chip border border-line bg-bg text-muted">
+                                    <div class="flex aspect-[4/3] w-full items-center justify-center rounded-chip border border-line bg-card text-muted">
                                         <x-site.icon name="photo" class="size-5" />
                                     </div>
                                 @endif
