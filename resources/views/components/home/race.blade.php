@@ -115,11 +115,11 @@
                                                     <span class="absolute inset-y-0 w-px bg-line" style="left: {{ $y / $yearSpan * 100 }}%"></span>
                                                 @endif
                                             @endforeach
-                                            <span class="absolute top-1/2 h-2.5 -translate-y-1/2 rounded-pill bg-ink"
-                                                  style="left: {{ $stint['left'] }}%; width: {{ $stint['width'] }}%">
+                                            <span class="race-bar absolute top-1/2 h-2.5 -translate-y-1/2 rounded-pill bg-ink"
+                                                  style="left: {{ $stint['left'] }}%; width: {{ $stint['width'] }}%; --i: {{ $loop->index }}">
                                                 @if ($stint['current'])
                                                     {{-- Masih berjalan --}}
-                                                    <span class="absolute top-1/2 -right-1.5 size-3 -translate-y-1/2 rounded-pill bg-red ring-2 ring-card"></span>
+                                                    <span class="live-dot absolute top-1/2 -right-1.5 size-3 -translate-y-1/2 rounded-pill bg-red ring-2 ring-card"></span>
                                                 @endif
                                             </span>
                                         </div>
@@ -138,9 +138,9 @@
                             <x-home.race-car class="top-[5px] -left-[8.5px] rotate-90" />
 
                             @foreach ($tab['stints'] as $stint)
-                                <li class="relative pb-6 pl-10 last:pb-0">
+                                <li class="relative pb-6 pl-10 last:pb-0" data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms">
                                     <span class="absolute top-0 bottom-0 left-[7px] w-px bg-line" aria-hidden="true"></span>
-                                    <span class="absolute top-1 left-0 size-4 rounded-pill bg-red ring-4 ring-card" aria-hidden="true"></span>
+                                    <span @class(['absolute top-1 left-0 size-4 rounded-pill bg-red ring-4 ring-card', 'live-dot' => $stint['current']]) aria-hidden="true"></span>
 
                                     <article class="group relative rounded-card border border-line bg-bg p-5 transition duration-300 ease-out-race hover:border-muted">
                                         <div class="flex flex-wrap items-center justify-between gap-2">

@@ -25,27 +25,40 @@
             <div class="mt-12 grid gap-4 md:grid-cols-3">
                 @foreach ($cards as $i => $card)
                     @php $wide = ($spans[$i] ?? 1) > 1; @endphp
+                    {{-- Kartu berlapis: luar = judul, dalam = bingkai abu + panel putih berisi teks & maskot.
+                         Saat di-hover (mouse), kartu miring dan panel dalam "terangkat" keluar (lihat .tilt di app.css). --}}
                     <article data-reveal data-tilt style="--reveal-delay: {{ min($i + 1, 6) * 60 }}ms" @class([
-                        'flex flex-col justify-between gap-6 overflow-hidden md:min-h-72 rounded-card border border-line bg-bg p-6 md:p-8 transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted',
+                        'group flex flex-col gap-5 rounded-card border border-line bg-bg p-3 md:min-h-80 transition duration-300 ease-out-race hover:border-red/40',
                         $spanClass[$spans[$i] ?? 1],
-                        'sm:flex-row sm:items-start' => $wide,
                     ])>
-                        <div class="max-w-md">
+                        <header class="px-3 pt-3 md:px-5 md:pt-5">
                             <p class="label-mono text-red-dark">{{ $card['sector'] }}</p>
-                            <h3 class="mt-4 text-2xl md:text-3xl">{{ $card['title'] }}</h3>
-                            <p class="mt-3 text-muted">{{ $card['body'] }}</p>
-                        </div>
+                            <h3 class="mt-3 text-2xl md:text-3xl">{{ $card['title'] }}</h3>
+                        </header>
 
-                        @if ($card['image'])
-                            <img src="{{ $card['image'] }}"
-                                 @if ($card['srcset']) srcset="{{ $card['srcset'] }}" sizes="14rem" @endif
-                                 @if ($card['size']) width="{{ $card['size'][0] }}" height="{{ $card['size'][1] }}" @endif
-                                 loading="lazy"
-                                 decoding="async"
-                                 alt="Maskot {{ setting('display_name') }} dalam pose {{ $card['title'] }}"
-                                 data-tilt-depth
-                                 class="h-40 w-auto self-end object-contain md:h-48">
-                        @endif
+                        <div data-tilt-frame class="flex grow rounded-card bg-line/60 p-1.5">
+                            <div data-tilt-layer @class([
+                                'flex grow flex-col justify-end gap-4 rounded-card border border-line bg-card p-5 md:p-6',
+                                'sm:flex-row sm:items-end sm:justify-between' => $wide,
+                            ])>
+                                @if ($card['image'])
+                                    <img src="{{ $card['image'] }}"
+                                         @if ($card['srcset']) srcset="{{ $card['srcset'] }}" sizes="14rem" @endif
+                                         @if ($card['size']) width="{{ $card['size'][0] }}" height="{{ $card['size'][1] }}" @endif
+                                         loading="lazy"
+                                         decoding="async"
+                                         alt="Maskot {{ setting('display_name') }} dalam pose {{ $card['title'] }}"
+                                         data-tilt-depth
+                                         @class([
+                                             'h-36 w-auto self-end object-contain md:h-44',
+                                             'sm:order-last' => $wide,
+                                         ])>
+                                @endif
+                                <p class="max-w-md font-medium text-ink">
+                                    <span class="marker">{{ $card['body'] }}</span>
+                                </p>
+                            </div>
+                        </div>
                     </article>
                 @endforeach
             </div>
