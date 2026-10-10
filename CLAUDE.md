@@ -173,6 +173,11 @@ vendor/bin/pint                    # rapikan format kode PHP
   panel dalam terangkat (`translateZ`) + bayangan halus, gambar `data-tilt-depth` bergeser (parallax). Pakai `transform`,
   bukan `translate`; jangan beri `overflow-hidden` di kartu/bingkai (merusak preserve-3d). Hanya mouse, tanpa reduced-motion.
   Teks kartu memakai utilitas `marker` (stabilo merah tipis tercoret saat hover).
+  Panel padat: kartu lebar (mulai `sm`) → teks kiri-bawah + maskot `absolute` kanan setinggi panel (maks 17.5rem,
+  gambar asli hanya ±274px, jangan diperbesar lagi); kartu sempit & semua kartu di HP → teks atas, maskot di bawahnya.
+  Saat hover panel maju `translate3d(-8px,-10px,64px)` sehingga bingkai abu terlihat sebagai alas.
+- Gambar maskot Race (`race.webp`, asli 263px) ditampilkan besar dan "menyandar" ke tepi atas kartu chart
+  (margin bawah negatif + kartu `relative z-10`).
 - Race Progress: bar stint tumbuh dari kiri saat chart terlihat & tiap ganti tab (`.race-js`/`.race-live` dipasang
   `raceTabs.init()`, bar `.race-bar` + `--i`); titik stint yang masih berjalan berdenyut (`.live-dot`).
 - Garage: saat baris di-hover, thumbnail zoom pelan, P1/P2… jadi merah, panah "View Lap" bergeser ke kanan.

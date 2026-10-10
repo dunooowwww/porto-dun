@@ -11,9 +11,11 @@
     <div class="mx-auto max-w-site px-4 py-16 md:px-8 md:py-24">
         <div class="flex items-end justify-between gap-8">
             <x-home.section-heading id="race-judul" :title="setting('race_title', 'Race Progress')" :intro="setting('race_intro')" />
+            {{-- Maskot dibuat besar (mendekati ukuran asli 263px) dan "menyandar" ke tepi atas kartu chart:
+                 margin bawah negatif + kartu z-10 menutupi sedikit bagian bawah gambar. --}}
             <img src="{{ asset('images/race.webp') }}" width="263" height="311" loading="lazy" decoding="async"
                  alt="Maskot {{ setting('display_name') }} berdiri membelakangi kamera, menghadap lintasan balap"
-                 class="hidden w-36 shrink-0 md:block lg:w-44">
+                 class="relative z-0 -mb-16 w-28 shrink-0 sm:w-40 md:-mb-24 md:w-56 lg:w-64">
         </div>
 
         @if (count($tabs) === 0)
@@ -21,7 +23,7 @@
                 Belum ada stint yang tercatat.
             </p>
         @else
-            <div class="mt-12 rounded-card border border-line bg-card p-5 md:p-8"
+            <div class="relative z-10 mt-12 rounded-card border border-line bg-card p-5 md:p-8"
                  x-data="raceTabs(@js($keys), @js($keys[0]))"
                  data-reveal>
                 {{-- Tab kategori (tab tanpa data tidak dirender) --}}

@@ -291,7 +291,7 @@ function initTilt() {
         return;
     }
 
-    const MAX_DEG = 4;
+    const MAX_DEG = 5;
     const MAX_SHIFT = 8; // px, untuk gambar [data-tilt-depth]
 
     cards.forEach((card) => {
