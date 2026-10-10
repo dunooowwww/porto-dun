@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\ExperienceCategory;
 use App\Models\Experience;
 use App\Models\MascotMessage;
 use App\Models\PitWallCard;
@@ -33,24 +34,66 @@ class FrontData
     }
 
     /**
-     * Timeline Race Progress, urut dari lap pertama.
+     * Chart Race Strategy: satu tab per kategori yang punya data (Profesional dulu, lalu Organisasi).
+     * Hanya pengalaman aktif yang punya kategori & tanggal mulai; urut dari yang paling awal.
+     * Posisi bar dihitung dalam persen dari rentang tahun tab itu sendiri.
+     * Kunci cache memakai bulan berjalan supaya bar yang masih berjalan ikut memanjang.
      *
      * @return array<int, array<string, mixed>>
      */
-    public static function timeline(): array
+    public static function raceStrategy(): array
     {
-        return SiteCache::remember('front.timeline', fn () => Experience::active()
-            ->get()
-            ->map(fn (Experience $experience) => [
-                'organization' => $experience->organization,
-                'role' => $experience->role,
-                'type' => $experience->type?->label(),
-                'period' => $experience->period_label,
-                'duration' => $experience->duration_label,
-                'current' => $experience->started_at !== null && $experience->is_current,
-                'achievement' => $experience->achievement,
-            ])
-            ->all());
+        return SiteCache::remember('front.race.'.now()->format('Y-m'), function () {
+            $now = now();
+            $tabs = [];
+
+            foreach (ExperienceCategory::cases() as $category) {
+                $items = Experience::active()
+                    ->where('category', $category)
+                    ->whereNotNull('started_at')
+                    ->get()
+                    ->sortBy('started_at')
+                    ->values();
+
+                if ($items->isEmpty()) {
+                    continue;
+                }
+
+                $firstYear = $items->min(fn (Experience $e) => $e->started_at->year);
+                $lastYear = $items->max(fn (Experience $e) => ($e->ended_at ?? $now)->year);
+                $rangeStart = $firstYear * 12;
+                $totalMonths = ($lastYear - $firstYear + 1) * 12;
+
+                $stints = $items->map(function (Experience $e, int $i) use ($now, $rangeStart, $totalMonths) {
+                    $end = $e->ended_at ?? $now;
+                    $startMonth = $e->started_at->year * 12 + $e->started_at->month - 1;
+                    $endMonth = $end->year * 12 + $end->month; // eksklusif: bulan terakhir ikut dihitung
+
+                    return [
+                        'number' => $i + 1,
+                        'organization' => $e->organization,
+                        'role' => $e->role,
+                        'type' => $e->type?->label(),
+                        'period' => $e->period_label,
+                        'duration' => $e->duration_label,
+                        'current' => $e->is_current,
+                        'achievement' => $e->achievement,
+                        'left' => round(($startMonth - $rangeStart) / $totalMonths * 100, 3),
+                        'width' => round(max(1, $endMonth - $startMonth) / $totalMonths * 100, 3),
+                    ];
+                })->all();
+
+                $tabs[] = [
+                    'key' => $category->value,
+                    'race' => $category->raceLabel(),
+                    'label' => $category->label(),
+                    'years' => range($firstYear, $lastYear),
+                    'stints' => $stints,
+                ];
+            }
+
+            return $tabs;
+        });
     }
 
     /**

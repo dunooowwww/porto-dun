@@ -60,6 +60,8 @@ class MotionTest extends TestCase
 
     public function test_race_track_has_a_moving_car_when_there_are_laps(): void
     {
+        Experience::factory()->create(['type' => 'magang', 'started_at' => '2024-06-01', 'ended_at' => '2024-09-01']);
+
         $this->get('/')->assertSee('x-data="raceCar"', false)->assertSee('x-ref="car"', false);
 
         Experience::query()->get()->each->delete(); // lewat model, supaya cache halaman depan ikut dibersihkan

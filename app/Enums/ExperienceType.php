@@ -25,6 +25,18 @@ enum ExperienceType: string implements HasLabel
     }
 
     /**
+     * Kategori bawaan untuk chart Race Strategy. Null = tidak tampil di chart.
+     */
+    public function defaultCategory(): ?ExperienceCategory
+    {
+        return match ($this) {
+            self::Magang, self::Kerja => ExperienceCategory::Professional,
+            self::Organisasi, self::Kepanitiaan => ExperienceCategory::Organizational,
+            self::Pendidikan, self::Lomba, self::Sertifikasi => null,
+        };
+    }
+
+    /**
      * Pilihan untuk dropdown admin: ['pendidikan' => 'Pendidikan', ...].
      *
      * @return array<string, string>

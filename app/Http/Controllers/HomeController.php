@@ -14,7 +14,7 @@ class HomeController extends Controller
     {
         return view('home', [
             'cards' => FrontData::pitWall(),
-            'timeline' => FrontData::timeline(),
+            'race' => FrontData::raceStrategy(),
             'projects' => FrontData::garage(),
             'mascot' => FrontData::mascot(),
         ]);

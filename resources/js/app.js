@@ -142,6 +142,41 @@ Alpine.data('mascot', (messages = {}) => ({
     },
 }));
 
+/**
+ * Tab kategori di chart Race Strategy. Pola tab ARIA: panah kiri/kanan & Home/End berpindah tab,
+ * hanya tab aktif yang masuk urutan Tab. Tanpa JS semua panel tetap tampil bertumpuk.
+ */
+Alpine.data('raceTabs', (keys = [], initial = null) => ({
+    active: initial ?? keys[0] ?? null,
+
+    isActive(key) {
+        return this.active === key;
+    },
+
+    select(key, focus = false) {
+        this.active = key;
+
+        if (focus) {
+            this.$nextTick(() => document.getElementById(`race-tab-${key}`)?.focus());
+        }
+    },
+
+    onKeydown(event) {
+        const index = keys.indexOf(this.active);
+        const moves = {
+            ArrowRight: (index + 1) % keys.length,
+            ArrowLeft: (index - 1 + keys.length) % keys.length,
+            Home: 0,
+            End: keys.length - 1,
+        };
+
+        if (event.key in moves) {
+            event.preventDefault();
+            this.select(keys[moves[event.key]], true);
+        }
+    },
+}));
+
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**

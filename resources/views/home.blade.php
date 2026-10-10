@@ -14,7 +14,7 @@
     <x-home.hero />
     <x-home.pit-wall :cards="$cards" />
 
-    <x-home.race :timeline="$timeline" />
+    <x-home.race :tabs="$race" />
     <x-home.garage :projects="$projects" />
     <x-home.box-box />
 

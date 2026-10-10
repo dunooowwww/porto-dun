@@ -19,6 +19,10 @@ class ExperienceFactory extends Factory
             'organization' => fake()->company(),
             'role' => fake()->jobTitle(),
             'type' => fake()->randomElement(ExperienceType::cases()),
+            // Ikuti jenis yang akhirnya dipakai (termasuk bila diisi manual di test).
+            'category' => fn (array $attributes) => ExperienceType::tryFrom(
+                $attributes['type'] instanceof ExperienceType ? $attributes['type']->value : (string) $attributes['type']
+            )?->defaultCategory(),
             'started_at' => $startedAt,
             'ended_at' => fake()->dateTimeBetween($startedAt, 'now'),
             'achievement' => fake()->optional()->sentence(),
