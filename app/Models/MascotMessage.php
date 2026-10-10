@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\FlushesSiteCache;
 use Database\Factories\MascotMessageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 class MascotMessage extends Model
 {
     /** @use HasFactory<MascotMessageFactory> */
-    use HasFactory;
+    use FlushesSiteCache, HasFactory;
 
     /** Kunci section (sama dengan id section di halaman) → nama tampil. */
     public const SECTIONS = [
