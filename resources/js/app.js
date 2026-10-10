@@ -8,7 +8,8 @@ import focus from '@alpinejs/focus';
 Alpine.data('navbar', (sectionIds = []) => ({
     scrolled: false,
     open: false,
-    active: sectionIds[0] ?? null,
+    // Kosong sampai ada section yang terlihat (halaman detail project tidak punya section ini).
+    active: null,
 
     init() {
         const onScroll = () => {

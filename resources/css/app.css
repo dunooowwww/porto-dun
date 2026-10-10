@@ -107,6 +107,55 @@
         @apply size-2 rounded-pill bg-red;
     }
 
+    /* Teks HTML dari RichEditor admin (kolom "Proses" project). */
+    .prose-case {
+        @apply text-lg text-ink;
+
+        & > * + * {
+            @apply mt-4;
+        }
+
+        & h2 {
+            @apply mt-10 text-2xl;
+        }
+
+        & h3 {
+            @apply mt-8 text-xl;
+        }
+
+        & ul {
+            @apply list-disc pl-6;
+        }
+
+        & ol {
+            @apply list-decimal pl-6;
+        }
+
+        & li + li {
+            @apply mt-1;
+        }
+
+        & a {
+            @apply underline decoration-red decoration-2 underline-offset-4 hover:text-red-dark;
+        }
+
+        & blockquote {
+            @apply border-l-2 border-line pl-4 text-muted italic;
+        }
+
+        & code {
+            @apply rounded-chip bg-bg px-1.5 py-0.5 font-mono text-[0.9em];
+        }
+
+        & pre {
+            @apply overflow-x-auto rounded-chip border border-line bg-bg p-4 font-mono text-sm;
+
+            & code {
+                @apply bg-transparent p-0;
+            }
+        }
+    }
+
     .btn-secondary {
         @apply inline-flex items-center gap-3 rounded-pill border border-line bg-card px-6 py-3 font-sans text-sm font-semibold text-ink transition duration-200 ease-out-race hover:-translate-y-0.5 hover:border-ink;
     }
