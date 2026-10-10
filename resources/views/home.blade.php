@@ -1,4 +1,12 @@
 <x-layouts.app>
+    <x-slot:head>
+        <x-site.lights-script />
+    </x-slot:head>
+
+    <x-slot:overlay>
+        <x-site.lights-out />
+    </x-slot:overlay>
+
     <x-slot:header>
         <x-site.navbar />
     </x-slot:header>

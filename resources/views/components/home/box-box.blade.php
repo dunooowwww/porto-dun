@@ -14,7 +14,7 @@
 
 <section id="box-box" aria-labelledby="box-box-judul" class="scroll-mt-24">
     <div class="mx-auto grid max-w-site gap-12 px-4 py-24 md:grid-cols-[1fr_1.1fr] md:gap-16 md:px-8 md:py-36">
-        <div>
+        <div data-reveal>
             <x-home.section-heading id="box-box-judul" :title="setting('contact_title', 'Box, Box')" :intro="setting('contact_intro')" />
 
             @if (setting('contact_quote'))
@@ -30,7 +30,7 @@
                                class="group flex items-center gap-4 py-4 text-ink">
                                 <x-site.icon :name="$link['icon']" class="size-5 shrink-0 text-muted" />
                                 <span class="label-mono w-24 shrink-0 text-muted">{{ $link['label'] }}</span>
-                                <span class="min-w-0 truncate font-medium group-hover:text-red-dark">{{ $link['text'] }}</span>
+                                <span class="link-grow min-w-0 truncate font-medium">{{ $link['text'] }}</span>
                                 <x-site.icon name="arrow-up-right" class="ml-auto size-4 shrink-0 text-muted group-hover:text-red-dark" />
                             </a>
                         </li>
@@ -39,7 +39,7 @@
             @endif
         </div>
 
-        <div class="rounded-card border border-line bg-card p-6 md:p-10" x-data="contactForm">
+        <div class="rounded-card border border-line bg-card p-6 md:p-10" x-data="contactForm" data-reveal style="--reveal-delay: 60ms">
             @if ($sent)
                 {{-- Sukses tanpa JS (setelah redirect) --}}
                 <x-home.contact-success :message="$sent">

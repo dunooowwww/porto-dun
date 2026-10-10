@@ -98,6 +98,20 @@
     background-size: calc(var(--checker, 6px) * 2) calc(var(--checker, 6px) * 2);
 }
 
+/* Link: garis bawah merah tumbuh dari kiri saat hover (design.md §6). Bisa dipicu dari .group. */
+@utility link-grow {
+    background-image: linear-gradient(var(--color-red), var(--color-red));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 2px;
+    transition: background-size 250ms var(--ease-out-race);
+
+    &:hover,
+    :where(.group:hover) & {
+        background-size: 100% 2px;
+    }
+}
+
 /* Label telemetri: SECTOR 1, P1, LAP 03, #12 */
 @utility label-mono {
     @apply font-mono text-xs font-medium tracking-label uppercase;
@@ -166,3 +180,108 @@
         @apply inline-flex items-center gap-3 rounded-pill border border-line bg-card px-6 py-3 font-sans text-sm font-semibold text-ink transition duration-200 ease-out-race hover:-translate-y-0.5 hover:border-ink;
     }
 }
+
+/* ------------------------------------------------------------------
+ * Motion (design.md §6, PRD F1). Semua animasi besar mati saat
+ * prefers-reduced-motion (lihat juga aturan global di @layer base).
+ * ------------------------------------------------------------------ */
+
+/* Loading screen "Lights Out": hanya tampil saat <html> punya kelas .lights-on (diset skrip kecil di <head>). */
+.lights-out {
+    display: none;
+}
+
+.lights-on .lights-out {
+    display: flex;
+    /* Overlay selalu berakhir tak terlihat & tak bisa diklik walau JS gagal. */
+    animation: lights-overlay 1.5s var(--ease-out-race) forwards;
+}
+
+.lights-on .lights-out .lamp {
+    /* Lampu ke-i menyala di detik i×0,2 dan padam bersamaan di detik 1,2 ("lights out"). */
+    animation: lamp-on calc(1.2s - var(--i) * 0.2s) steps(1, end) calc(var(--i) * 0.2s);
+}
+
+@keyframes lights-overlay {
+    /* visibility & pointer-events ditulis eksplisit: properti diskrit berganti di tengah dua keyframe,
+       jadi tanpa ini overlay sudah tidak bisa diklik (skip) sejak tengah animasi. */
+    0%,
+    80% {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+@keyframes lamp-on {
+    from,
+    to {
+        background-color: var(--color-red);
+    }
+}
+
+/* Animasi masuk section: .reveal-ready dipasang oleh JS, jadi tanpa JS semua konten tetap terlihat. */
+.reveal-ready [data-reveal] {
+    opacity: 0;
+    translate: -16px 0;
+    transition:
+        opacity 320ms var(--ease-out-race),
+        translate 320ms var(--ease-out-race);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    translate: 0 0;
+}
+
+/* Bendera checkered sukses form: naik lalu berkibar sekali. */
+.flag-wave {
+    transform-origin: 0 100%;
+    animation: flag-wave 600ms var(--ease-out-race) both;
+}
+
+@keyframes flag-wave {
+    0% {
+        opacity: 0;
+        translate: 0 12px;
+        rotate: -14deg;
+    }
+
+    55% {
+        opacity: 1;
+        translate: 0 0;
+        rotate: 6deg;
+    }
+
+    80% {
+        rotate: -3deg;
+    }
+
+    100% {
+        rotate: 0deg;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lights-on .lights-out {
+        display: none;
+    }
+
+    .reveal-ready [data-reveal] {
+        opacity: 1;
+        translate: none;
+        transition: none;
+    }
+
+    .flag-wave {
+        animation: none;
+    }
+}
+

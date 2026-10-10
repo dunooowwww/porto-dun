@@ -24,8 +24,8 @@
             <div class="mt-12 grid gap-4 md:grid-cols-3">
                 @foreach ($cards as $i => $card)
                     @php $wide = ($spans[$i] ?? 1) > 1; @endphp
-                    <article @class([
-                        'flex flex-col justify-between gap-6 overflow-hidden md:min-h-72 rounded-card border border-line bg-card p-6 md:p-8',
+                    <article data-reveal style="--reveal-delay: {{ min($i + 1, 6) * 60 }}ms" @class([
+                        'flex flex-col justify-between gap-6 overflow-hidden md:min-h-72 rounded-card border border-line bg-card p-6 md:p-8 transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted',
                         $spanClass[$spans[$i] ?? 1],
                         'sm:flex-row sm:items-start' => $wide,
                     ])>

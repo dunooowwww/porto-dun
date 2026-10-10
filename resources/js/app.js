@@ -142,6 +142,100 @@ Alpine.data('mascot', (messages = {}) => ({
     },
 }));
 
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/**
+ * Mobil kecil di lintasan Race Progress (design.md §5): bergerak mengikuti scroll halaman.
+ * Desktop: sepanjang garis horizontal. HP: turun sepanjang garis vertikal (diputar lewat CSS).
+ * Dengan reduced-motion mobil diam di garis start.
+ */
+Alpine.data('raceCar', () => ({
+    init() {
+        const track = this.$el;
+        const car = this.$refs.car;
+
+        if (!car || prefersReducedMotion()) {
+            return;
+        }
+
+        const desktop = window.matchMedia('(min-width: 768px)');
+        let ticking = false;
+
+        const update = () => {
+            ticking = false;
+            const rect = track.getBoundingClientRect();
+            const viewport = window.innerHeight;
+            // 0 saat lintasan mulai terlihat dari bawah, 1 saat lintasan hampir selesai dilewati.
+            const progress = Math.min(1, Math.max(0, (viewport * 0.85 - rect.top) / (rect.height + viewport * 0.35)));
+
+            if (desktop.matches) {
+                // Tetap di area lintasan yang terlihat walau lintasan sedang digeser ke samping.
+                const distance = track.clientWidth - car.offsetWidth;
+                car.style.translate = `${track.scrollLeft + progress * distance}px 0`;
+            } else {
+                const distance = track.offsetHeight - car.offsetWidth;
+                car.style.translate = `0 ${progress * distance}px`;
+            }
+        };
+
+        const schedule = () => {
+            if (!ticking) {
+                ticking = true;
+                window.requestAnimationFrame(update);
+            }
+        };
+
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
+        track.addEventListener('scroll', schedule, { passive: true });
+        update();
+    },
+}));
+
+/**
+ * Animasi masuk section (design.md §6): elemen [data-reveal] masuk sedikit dari kiri saat terlihat.
+ * Kelas .reveal-ready baru dipasang di sini, jadi tanpa JS (atau dengan reduced-motion) konten tetap tampil.
+ */
+function initReveal() {
+    const elements = document.querySelectorAll('[data-reveal]');
+
+    if (elements.length === 0 || prefersReducedMotion() || !('IntersectionObserver' in window)) {
+        return;
+    }
+
+    document.documentElement.classList.add('reveal-ready');
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+
+                const el = entry.target;
+                observer.unobserve(el);
+                el.classList.add('is-visible');
+                // Setelah selesai, lepas atribut supaya delay stagger tidak memperlambat hover kartu.
+                // Abaikan transitionend dari elemen anak (event-nya ikut "menggelembung" ke atas).
+                const finish = (event) => {
+                    if (event.target !== el) {
+                        return;
+                    }
+                    el.removeEventListener('transitionend', finish);
+                    el.removeAttribute('data-reveal');
+                    el.classList.remove('is-visible');
+                };
+                el.addEventListener('transitionend', finish);
+            });
+        },
+        { rootMargin: '0px 0px -10% 0px' },
+    );
+
+    elements.forEach((el) => observer.observe(el));
+}
+
+initReveal();
+
 Alpine.plugin(focus);
 window.Alpine = Alpine;
 Alpine.start();

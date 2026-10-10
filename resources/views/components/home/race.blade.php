@@ -27,10 +27,24 @@
                 </p>
             @endif
 
-            <ol @class(['md:flex md:snap-x md:overflow-x-auto md:pb-4', 'mt-12' => ! $scrollable, 'mt-12 md:mt-4' => $scrollable])
+            <ol x-data="raceCar" @class(['relative md:flex md:snap-x md:overflow-x-auto md:pb-4', 'mt-12' => ! $scrollable, 'mt-12 md:mt-4' => $scrollable])
                 @if ($scrollable) tabindex="0" aria-label="Timeline, bisa digeser ke samping" @endif>
+                {{-- Mobil kecil di lintasan; posisinya mengikuti scroll (Alpine raceCar). Diputar 90° di HP. --}}
+                <span x-ref="car" class="pointer-events-none absolute top-[5px] -left-[8.5px] z-10 block h-3.5 w-8 max-md:rotate-90 md:top-0 md:left-0" aria-hidden="true">
+                    <svg viewBox="0 0 32 14" class="size-full">
+                        <rect x="0" y="2" width="3" height="10" rx="1" class="fill-ink" />
+                        <rect x="5" y="0" width="6" height="3" rx="1" class="fill-ink" />
+                        <rect x="5" y="11" width="6" height="3" rx="1" class="fill-ink" />
+                        <rect x="19" y="0" width="6" height="3" rx="1" class="fill-ink" />
+                        <rect x="19" y="11" width="6" height="3" rx="1" class="fill-ink" />
+                        <rect x="3" y="3.5" width="24" height="7" rx="3.5" class="fill-ink" />
+                        <rect x="8" y="6" width="13" height="2" rx="1" class="fill-red" />
+                        <rect x="28" y="1" width="3" height="12" rx="1" class="fill-ink" />
+                    </svg>
+                </span>
+
                 @foreach ($timeline as $lap)
-                    <li @class([
+                    <li data-reveal style="--reveal-delay: {{ min($loop->iteration, 6) * 60 }}ms" @class([
                         'relative pb-8 pl-10 last:pb-0 md:snap-start md:pt-12 md:pr-4 md:pb-0 md:pl-0',
                         'md:min-w-64 md:flex-1' => ! $scrollable,
                         'md:w-[17rem] md:flex-none' => $scrollable,
@@ -40,7 +54,7 @@
                         {{-- Checkpoint --}}
                         <span class="absolute top-1 left-0 size-4 rounded-pill bg-red ring-4 ring-bg md:top-0" aria-hidden="true"></span>
 
-                        <article class="rounded-card border border-line bg-card p-5 md:p-6">
+                        <article class="rounded-card border border-line bg-card p-5 md:p-6 transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted">
                             <div class="flex flex-wrap items-center justify-between gap-2">
                                 <p class="label-mono text-red-dark">LAP {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
                                 @if ($lap['type'])

@@ -24,9 +24,9 @@
 
     <article class="mx-auto max-w-site px-4 pt-28 pb-24 md:px-8 md:pt-36 md:pb-36">
         <header>
-            <a href="{{ $garageUrl }}" class="label-mono inline-flex items-center gap-2 text-muted hover:text-ink">
+            <a href="{{ $garageUrl }}" class="group label-mono inline-flex items-center gap-2 text-muted hover:text-ink">
                 <x-site.icon name="arrow-left" class="size-4" />
-                Kembali ke Garage
+                <span class="link-grow">Kembali ke Garage</span>
             </a>
 
             @if ($isDraft)
@@ -158,7 +158,7 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     @if ($previous)
                         <a href="{{ route('projects.show', $previous['slug']) }}"
-                           class="group rounded-card border border-line bg-card p-6 transition-colors hover:border-ink">
+                           class="group rounded-card border border-line bg-card p-6 transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted">
                             <span class="label-mono flex items-center gap-2 text-muted">
                                 <x-site.icon name="arrow-left" class="size-4" /> Sebelumnya · P{{ $previous['position'] }}
                             </span>
@@ -169,7 +169,7 @@
                     @endif
                     @if ($next)
                         <a href="{{ route('projects.show', $next['slug']) }}"
-                           class="group rounded-card border border-line bg-card p-6 text-right transition-colors hover:border-ink">
+                           class="group rounded-card border border-line bg-card p-6 text-right transition duration-300 ease-out-race hover:-translate-y-1 hover:border-muted">
                             <span class="label-mono flex items-center justify-end gap-2 text-muted">
                                 Berikutnya · P{{ $next['position'] }} <x-site.icon name="arrow-right" class="size-4" />
                             </span>
