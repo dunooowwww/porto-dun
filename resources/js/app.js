@@ -131,6 +131,25 @@ Alpine.data('mascot', (messages = {}) => ({
 Alpine.data('raceTabs', (keys = [], initial = null) => ({
     active: initial ?? keys[0] ?? null,
 
+    /** Bar stint tumbuh saat chart pertama kali terlihat (CSS .race-js / .race-live di app.css). */
+    init() {
+        if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+            return;
+        }
+
+        this.$el.classList.add('race-js');
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    this.$el.classList.add('race-live');
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '0px 0px -15% 0px' },
+        );
+        observer.observe(this.$el);
+    },
+
     isActive(key) {
         return this.active === key;
     },

@@ -168,9 +168,14 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Mobil di lintasan Race: Alpine `raceCar` pada `<ol>`, gerak lewat properti CSS `translate` (bukan `transform`,
   karena di HP mobil diputar dengan `rotate`).
 - Bendera sukses form: kelas `flag-wave`.
-- Kartu Pit Wall miring ikut kursor (3D tilt, diminta Dun): atribut `data-tilt` di kartu + `data-tilt-depth` di gambar
-  (parallax). `initTilt()` di app.js menulis CSS variable; transform di `.tilt` (app.css, pakai `transform`, bukan
-  `translate`). Hanya mouse (`hover: hover` + `pointer: fine`) dan tanpa reduced-motion.
+- Kartu Pit Wall berlapis ala portoanam (diminta Dun): luar = judul, `data-tilt-frame` (bingkai abu) →
+  `data-tilt-layer` (panel putih berisi teks + maskot). Miring ikut kursor (`data-tilt`, `initTilt()` → CSS variable),
+  panel dalam terangkat (`translateZ`) + bayangan halus, gambar `data-tilt-depth` bergeser (parallax). Pakai `transform`,
+  bukan `translate`; jangan beri `overflow-hidden` di kartu/bingkai (merusak preserve-3d). Hanya mouse, tanpa reduced-motion.
+  Teks kartu memakai utilitas `marker` (stabilo merah tipis tercoret saat hover).
+- Race Progress: bar stint tumbuh dari kiri saat chart terlihat & tiap ganti tab (`.race-js`/`.race-live` dipasang
+  `raceTabs.init()`, bar `.race-bar` + `--i`); titik stint yang masih berjalan berdenyut (`.live-dot`).
+- Garage: saat baris di-hover, thumbnail zoom pelan, P1/P2… jadi merah, panah "View Lap" bergeser ke kanan.
 - Semua animasi besar dimatikan di blok `@media (prefers-reduced-motion: reduce)` di app.css + cek di JS.
 
 ## Definition of Done tiap milestone

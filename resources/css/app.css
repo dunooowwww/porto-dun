@@ -242,9 +242,12 @@
 }
 
 /* Kartu miring ikut kursor (initTilt di app.js; hanya mouse & tanpa reduced-motion).
-   Memakai `transform` supaya tidak bentrok dengan `translate` milik hover/reveal. */
+   Memakai `transform` supaya tidak bentrok dengan `translate` milik hover/reveal.
+   Kartu berlapis: [data-tilt-frame] → [data-tilt-layer] "terangkat" (translateZ) saat miring.
+   preserve-3d harus ada di setiap lapisan; jangan beri overflow-hidden di kartu/bingkai (membuat datar lagi). */
 .tilt {
     transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
     transition:
         transform 500ms var(--ease-out-race),
         translate 300ms var(--ease-out-race),
@@ -256,6 +259,23 @@
     transition-duration: 120ms, 300ms, 300ms;
 }
 
+.tilt [data-tilt-frame] {
+    transform-style: preserve-3d;
+}
+
+.tilt [data-tilt-layer] {
+    transform: translateZ(0);
+    transition:
+        transform 500ms var(--ease-out-race),
+        box-shadow 500ms var(--ease-out-race);
+}
+
+.tilt.is-tilting [data-tilt-layer] {
+    transform: translateZ(36px);
+    /* Bayangan sangat halus dari token ink (design.md §4). */
+    box-shadow: 0 22px 40px -24px color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+
 .tilt [data-tilt-depth] {
     transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0);
     transition: transform 500ms var(--ease-out-race);
@@ -263,6 +283,67 @@
 
 .tilt.is-tilting [data-tilt-depth] {
     transition-duration: 120ms;
+}
+
+/* Stabilo tipis di belakang teks, "tercoret" dari kiri saat kartu (.group) di-hover. */
+@utility marker {
+    background-image: linear-gradient(
+        color-mix(in srgb, var(--color-red) 12%, transparent),
+        color-mix(in srgb, var(--color-red) 12%, transparent)
+    );
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    transition: background-size 600ms var(--ease-out-race);
+
+    :where(.group:hover) & {
+        background-size: 100% 100%;
+    }
+}
+
+/* Race Progress: bar stint "tumbuh" dari kiri saat chart terlihat dan setiap ganti tab
+   (panel x-show berganti display → animasi CSS otomatis diulang). Kelas dipasang raceTabs. */
+.race-js .race-bar {
+    scale: 0 1;
+    transform-origin: left center;
+}
+
+.race-js.race-live .race-bar {
+    animation: bar-grow 700ms var(--ease-out-race) both;
+    animation-delay: calc(var(--i, 0) * 90ms + 150ms);
+}
+
+@keyframes bar-grow {
+    from {
+        scale: 0 1;
+    }
+
+    to {
+        scale: 1 1;
+    }
+}
+
+/* Titik merah stint yang masih berjalan: cincin berdenyut pelan (telemetri "live"). */
+.live-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid var(--color-red);
+    animation: live-ring 1.8s var(--ease-out-race) infinite;
+}
+
+@keyframes live-ring {
+    from {
+        opacity: 0.7;
+        scale: 1;
+    }
+
+    to {
+        opacity: 0;
+        scale: 2.4;
+    }
 }
 
 /* Bendera checkered sukses form: naik lalu berkibar sekali. */
@@ -309,8 +390,20 @@
     }
 
     .tilt,
+    .tilt [data-tilt-layer],
     .tilt [data-tilt-depth] {
         transform: none;
+    }
+
+    .race-js .race-bar,
+    .race-js.race-live .race-bar {
+        scale: 1 1;
+        animation: none;
+    }
+
+    .live-dot::after {
+        animation: none;
+        display: none;
     }
 }
 
