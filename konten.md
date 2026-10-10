@@ -3,6 +3,8 @@
 > Cara isi: ganti semua teks di dalam [kurung siku]. Yang belum ada boleh dikosongkan
 > atau tulis "nanti" — Claude Code akan pakai teks contoh dulu.
 > Gaya bahasa: santai tapi tetap jelas (boleh campur Indo-Inggris).
+> File ini dipakai sebagai DATA AWAL (seeder). Setelah web jadi, semua isi bisa diubah lewat admin panel (/admin).
+> Untuk timeline, tulis tanggal dengan format bulan & tahun (contoh: Agustus 2023) supaya durasi bisa dihitung otomatis.
 
 ---
 
