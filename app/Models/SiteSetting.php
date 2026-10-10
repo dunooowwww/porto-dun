@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\SiteCache;
 use Database\Factories\SiteSettingFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,5 +55,6 @@ class SiteSetting extends Model
     public static function flushCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+        SiteCache::flush();
     }
 }

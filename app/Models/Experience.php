@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Enums\ExperienceType;
+use App\Models\Concerns\DeletesUploadedFiles;
+use App\Models\Concerns\FlushesSiteCache;
+use App\Models\Concerns\HasSortOrder;
 use Database\Factories\ExperienceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -16,7 +19,7 @@ use Illuminate\Support\Carbon;
 class Experience extends Model
 {
     /** @use HasFactory<ExperienceFactory> */
-    use HasFactory;
+    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasSortOrder;
 
     protected function casts(): array
     {
@@ -27,6 +30,11 @@ class Experience extends Model
             'sort' => 'integer',
             'is_active' => 'boolean',
         ];
+    }
+
+    protected function uploadAttributes(): array
+    {
+        return ['logo'];
     }
 
     #[Scope]

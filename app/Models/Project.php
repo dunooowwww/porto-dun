@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Enums\ProjectStatus;
+use App\Models\Concerns\DeletesUploadedFiles;
+use App\Models\Concerns\FlushesSiteCache;
+use App\Models\Concerns\HasSortOrder;
 use Database\Factories\ProjectFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -20,7 +23,7 @@ use Illuminate\Support\Str;
 class Project extends Model
 {
     /** @use HasFactory<ProjectFactory> */
-    use HasFactory;
+    use DeletesUploadedFiles, FlushesSiteCache, HasFactory, HasSortOrder;
 
     protected $attributes = [
         'status' => 'draft',
@@ -49,6 +52,14 @@ class Project extends Model
                 $project->published_at = now();
             }
         });
+
+        // Hapus galeri lewat model (bukan cascade database) supaya file gambarnya ikut terhapus.
+        static::deleting(fn (self $project) => $project->images->each->delete());
+    }
+
+    protected function uploadAttributes(): array
+    {
+        return ['thumbnail'];
     }
 
     /** URL detail memakai slug: /projects/{slug}. */

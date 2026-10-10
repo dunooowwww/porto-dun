@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum ExperienceType: string
+use Filament\Support\Contracts\HasLabel;
+
+enum ExperienceType: string implements HasLabel
 {
     case Pendidikan = 'pendidikan';
     case Organisasi = 'organisasi';
@@ -15,6 +17,11 @@ enum ExperienceType: string
     public function label(): string
     {
         return $this->name;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label();
     }
 
     /**
