@@ -71,6 +71,7 @@ class FrontData
 
                     return [
                         'number' => $i + 1,
+                        'dialog' => 'stint-'.$e->id,
                         'organization' => $e->organization,
                         'role' => $e->role,
                         'type' => $e->type?->label(),
@@ -78,6 +79,7 @@ class FrontData
                         'duration' => $e->duration_label,
                         'current' => $e->is_current,
                         'achievement' => $e->achievement,
+                        'logo' => $e->logo_url,
                         'left' => round(($startMonth - $rangeStart) / $totalMonths * 100, 3),
                         'width' => round(max(1, $endMonth - $startMonth) / $totalMonths * 100, 3),
                     ];

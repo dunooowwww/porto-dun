@@ -161,6 +161,11 @@ Alpine.data('raceTabs', (keys = [], initial = null) => ({
         }
     },
 
+    /** Buka detail stint (<dialog> bawaan browser; fokus kembali ke tombol saat ditutup). */
+    openStint(id) {
+        document.getElementById(id)?.showModal();
+    },
+
     onKeydown(event) {
         const index = keys.indexOf(this.active);
         const moves = {

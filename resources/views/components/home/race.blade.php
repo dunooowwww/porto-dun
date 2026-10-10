@@ -8,7 +8,7 @@
 @endphp
 
 <section id="race" aria-labelledby="race-judul" class="scroll-mt-24">
-    <div class="mx-auto max-w-site px-4 py-24 md:px-8 md:py-36">
+    <div class="mx-auto max-w-site px-4 py-16 md:px-8 md:py-24">
         <div class="flex items-end justify-between gap-8">
             <x-home.section-heading id="race-judul" :title="setting('race_title', 'Race Progress')" :intro="setting('race_intro')" />
             <img src="{{ asset('images/race.webp') }}" width="263" height="311" loading="lazy" decoding="async"
@@ -69,7 +69,8 @@
 
                         {{-- Desktop: chart strategi --}}
                         <div class="mt-6 hidden md:block">
-                            <div class="grid grid-cols-[16rem_minmax(0,1fr)] gap-x-8">
+                            {{-- Kolom sama dengan baris stint: info | lintasan | "Detail" --}}
+                            <div class="grid grid-cols-[16rem_minmax(0,1fr)_auto] gap-x-8">
                                 <span></span>
                                 {{-- Sumbu tahun + mobil kecil yang melaju mengikuti scroll --}}
                                 <div class="relative h-9" x-data="raceCar" aria-hidden="true">
@@ -80,11 +81,12 @@
                                     @endforeach
                                     <x-home.race-car class="bottom-[1.5px] left-0" />
                                 </div>
+                                <span class="label-mono invisible flex items-center gap-1.5" aria-hidden="true">Detail<span class="size-3.5"></span></span>
                             </div>
 
                             <ol>
                                 @foreach ($tab['stints'] as $stint)
-                                    <li class="grid grid-cols-[16rem_minmax(0,1fr)] items-center gap-x-8 border-t border-line py-4 first:mt-2">
+                                    <li class="group relative grid grid-cols-[16rem_minmax(0,1fr)_auto] items-center gap-x-8 border-t border-line py-4 first:mt-2">
                                         <div class="min-w-0">
                                             <p class="label-mono text-red-dark">
                                                 Stint {{ str_pad((string) $stint['number'], 2, '0', STR_PAD_LEFT) }}
@@ -92,8 +94,13 @@
                                                     <span class="text-muted">· {{ $stint['type'] }}</span>
                                                 @endif
                                             </p>
-                                            <h3 class="mt-2 truncate text-lg" title="{{ $stint['organization'] }}">{{ $stint['organization'] }}</h3>
-                                            <p class="truncate text-sm text-ink">{{ $stint['role'] }}</p>
+                                            <h3 class="mt-2 line-clamp-2 text-lg">
+                                                {{-- Tombol melebar ke seluruh baris (after:inset-0), jadi satu baris = satu area klik. --}}
+                                                <button type="button" class="text-left after:absolute after:inset-0 after:rounded-chip"
+                                                        aria-haspopup="dialog" aria-controls="{{ $stint['dialog'] }}"
+                                                        @click="openStint('{{ $stint['dialog'] }}')">{{ $stint['organization'] }}</button>
+                                            </h3>
+                                            <p class="line-clamp-2 text-sm text-ink">{{ $stint['role'] }}</p>
                                             <p class="mt-1 font-mono text-xs text-muted">
                                                 {{ $stint['period'] }} @if ($stint['duration'])<span aria-hidden="true">·</span> {{ $stint['duration'] }}@endif
                                             </p>
@@ -116,6 +123,11 @@
                                                 @endif
                                             </span>
                                         </div>
+
+                                        <span class="label-mono flex items-center gap-1.5 text-muted transition-colors group-hover:text-ink" aria-hidden="true">
+                                            <span class="link-grow">Detail</span>
+                                            <x-site.icon name="arrow-up-right" class="size-3.5" />
+                                        </span>
                                     </li>
                                 @endforeach
                             </ol>
@@ -130,25 +142,38 @@
                                     <span class="absolute top-0 bottom-0 left-[7px] w-px bg-line" aria-hidden="true"></span>
                                     <span class="absolute top-1 left-0 size-4 rounded-pill bg-red ring-4 ring-card" aria-hidden="true"></span>
 
-                                    <article class="rounded-card border border-line bg-bg p-5">
+                                    <article class="group relative rounded-card border border-line bg-bg p-5 transition duration-300 ease-out-race hover:border-muted">
                                         <div class="flex flex-wrap items-center justify-between gap-2">
                                             <p class="label-mono text-red-dark">Stint {{ str_pad((string) $stint['number'], 2, '0', STR_PAD_LEFT) }}</p>
                                             @if ($stint['type'])
                                                 <span class="label-mono rounded-chip border border-line bg-card px-2.5 py-1 text-muted">{{ $stint['type'] }}</span>
                                             @endif
                                         </div>
-                                        <h3 class="mt-4 text-xl">{{ $stint['organization'] }}</h3>
+                                        <h3 class="mt-4 text-xl">
+                                            <button type="button" class="text-left after:absolute after:inset-0 after:rounded-card"
+                                                    aria-haspopup="dialog" aria-controls="{{ $stint['dialog'] }}"
+                                                    @click="openStint('{{ $stint['dialog'] }}')">{{ $stint['organization'] }}</button>
+                                        </h3>
                                         <p class="mt-1 text-ink">{{ $stint['role'] }}</p>
                                         <p class="mt-3 font-mono text-xs text-muted">
                                             {{ $stint['period'] }} @if ($stint['duration'])<span aria-hidden="true">·</span> {{ $stint['duration'] }}@endif
                                         </p>
                                         @if ($stint['achievement'])
-                                            <p class="mt-4 border-t border-line pt-4 text-sm text-muted">{{ $stint['achievement'] }}</p>
+                                            <p class="mt-4 line-clamp-3 border-t border-line pt-4 text-sm text-muted">{{ $stint['achievement'] }}</p>
                                         @endif
+                                        <p class="label-mono mt-4 flex items-center gap-1.5 text-ink" aria-hidden="true">
+                                            <span class="link-grow">Lihat detail</span>
+                                            <x-site.icon name="arrow-up-right" class="size-3.5" />
+                                        </p>
                                     </article>
                                 </li>
                             @endforeach
                         </ol>
+
+                        {{-- Detail tiap stint: <dialog> bawaan browser (Esc menutup, fokus terkunci di dalam modal). --}}
+                        @foreach ($tab['stints'] as $stint)
+                            <x-home.stint-dialog :stint="$stint" :category="$tab['label']" />
+                        @endforeach
                     </div>
                 @endforeach
             </div>

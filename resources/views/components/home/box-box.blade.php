@@ -13,7 +13,7 @@
 @endphp
 
 <section id="box-box" aria-labelledby="box-box-judul" class="scroll-mt-24">
-    <div class="mx-auto grid max-w-site gap-12 px-4 py-24 md:grid-cols-[1fr_1.1fr] md:gap-16 md:px-8 md:py-36">
+    <div class="mx-auto grid max-w-site gap-12 px-4 py-16 md:grid-cols-[1fr_1.1fr] md:gap-16 md:px-8 md:py-24">
         {{-- min-w-0: item grid jangan melebar mengikuti URL kontak yang panjang (truncate baru bekerja). --}}
         <div class="min-w-0" data-reveal>
             <x-home.section-heading id="box-box-judul" :title="setting('contact_title', 'Box, Box')" :intro="setting('contact_intro')" />

@@ -51,6 +51,8 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - `resources/views/components/home/race.blade.php` — chart Race Strategy: tab Alpine `raceTabs` (pola tab ARIA)
   "Main race · Profesional" / "Sprint · Organisasi", data dari `FrontData::raceStrategy()` (rentang tahun & posisi bar
   dalam persen per tab, cache per bulan). Desktop = chart, HP = kartu vertikal; mobil kecil = komponen `race-car`.
+  Tiap stint bisa diklik → modal detail `home/stint-dialog` (`<dialog>` bawaan, dibuka `raceTabs.openStint(id)`,
+  id `stint-{experience id}`; Esc / klik backdrop / tombol X menutup).
 - `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `race`, `garage`, `box-box`
   (+ `field-error`, `contact-success`), `section-heading`
 - `App\Support\Sections::NAV` — id section ↔ label menu (dipakai navbar & maskot)
@@ -149,6 +151,8 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Fokus keyboard: aturan `:focus-visible` sengaja di luar `@layer` di app.css (utilitas Tailwind v4 menang atas
   layer base). Jangan pindahkan ke `@layer base`.
 - Section memakai `scroll-mt-24` agar judul tidak tertutup navbar; link navbar berbentuk `url('/').'#id'`.
+- Jarak section: `py-16 md:py-24`. Latar berselang-seling: hero/race/box-box `bg` (off-white),
+  pit-wall/garage `bg-card border-y border-line` (putih) — kartu di section putih memakai `bg-bg`.
 - Gambar upload: beri `width`/`height` (helper `upload_image_size($path)`) dan `loading="lazy"` kecuali hero.
 
 ## Motion (M7) — hanya animasi ini, jangan menambah yang lain
