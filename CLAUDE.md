@@ -46,7 +46,7 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - `resources/views/projects/show.blade.php` + `ProjectController` — detail `/projects/{slug}` (route `projects.show`);
   draft hanya untuk admin login (+ `noindex`), slug salah → 404
 - `resources/views/components/site/` — `navbar` (Alpine `navbar()`), `footer` (di layout, semua halaman),
-  `mascot` (Alpine `mascot()`, hanya halaman depan lewat slot `floating`), `icon`
+  `mascot` (Alpine `mascot()`, hanya halaman depan lewat slot `floating`, selalu tampil — tombol tutup sengaja dihapus), `icon`
 - `resources/views/errors/404.blade.php` — halaman "DNF – Did Not Find" (teks dari Pengaturan Situs)
 - `resources/views/components/home/race.blade.php` — chart Race Strategy: tab Alpine `raceTabs` (pola tab ARIA)
   "Main race · Profesional" / "Sprint · Organisasi", data dari `FrontData::raceStrategy()` (rentang tahun & posisi bar
@@ -168,6 +168,9 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Mobil di lintasan Race: Alpine `raceCar` pada `<ol>`, gerak lewat properti CSS `translate` (bukan `transform`,
   karena di HP mobil diputar dengan `rotate`).
 - Bendera sukses form: kelas `flag-wave`.
+- Kartu Pit Wall miring ikut kursor (3D tilt, diminta Dun): atribut `data-tilt` di kartu + `data-tilt-depth` di gambar
+  (parallax). `initTilt()` di app.js menulis CSS variable; transform di `.tilt` (app.css, pakai `transform`, bukan
+  `translate`). Hanya mouse (`hover: hover` + `pointer: fine`) dan tanpa reduced-motion.
 - Semua animasi besar dimatikan di blok `@media (prefers-reduced-motion: reduce)` di app.css + cek di JS.
 
 ## Definition of Done tiap milestone

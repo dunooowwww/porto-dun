@@ -99,22 +99,13 @@ Alpine.data('contactForm', () => ({
 }));
 
 /**
- * Maskot pojok (PRD F9): bubble chat berganti sesuai section yang terlihat. Bisa disembunyikan;
- * pilihan disimpan di localStorage (dibungkus try/catch karena bisa diblokir browser).
+ * Maskot pojok (PRD F9): bubble chat berganti sesuai section yang terlihat.
+ * Sengaja selalu tampil (tidak bisa ditutup) atas permintaan pemilik situs.
  */
-const MASCOT_KEY = 'dun12-maskot-disembunyikan';
-
 Alpine.data('mascot', (messages = {}) => ({
-    hidden: false,
     message: messages.hero ?? Object.values(messages)[0] ?? '',
 
     init() {
-        try {
-            this.hidden = window.localStorage.getItem(MASCOT_KEY) === '1';
-        } catch {
-            this.hidden = false;
-        }
-
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -130,15 +121,6 @@ Alpine.data('mascot', (messages = {}) => ({
             .map((id) => document.getElementById(id))
             .filter(Boolean)
             .forEach((section) => observer.observe(section));
-    },
-
-    hide() {
-        this.hidden = true;
-        try {
-            window.localStorage.setItem(MASCOT_KEY, '1');
-        } catch {
-            // Penyimpanan diblokir: maskot tetap tersembunyi sampai halaman dimuat ulang.
-        }
     },
 }));
 
@@ -275,6 +257,59 @@ function initReveal() {
 }
 
 initReveal();
+
+/**
+ * Kartu miring mengikuti kursor (efek 3D tilt) untuk elemen [data-tilt], misalnya kartu Pit Wall.
+ * Elemen anak [data-tilt-depth] (gambar maskot) ikut bergeser sedikit → kesan parallax.
+ * Hanya untuk perangkat dengan mouse (bukan layar sentuh) dan tanpa reduced-motion.
+ * Posisi ditulis ke CSS variable; transform-nya ada di app.css (.tilt).
+ */
+function initTilt() {
+    const cards = document.querySelectorAll('[data-tilt]');
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (cards.length === 0 || !canHover || prefersReducedMotion()) {
+        return;
+    }
+
+    const MAX_DEG = 4;
+    const MAX_SHIFT = 8; // px, untuk gambar [data-tilt-depth]
+
+    cards.forEach((card) => {
+        let frame = null;
+
+        card.classList.add('tilt');
+
+        card.addEventListener('pointermove', (event) => {
+            if (frame) {
+                return;
+            }
+            frame = requestAnimationFrame(() => {
+                frame = null;
+                const rect = card.getBoundingClientRect();
+                // -0.5 … 0.5 dari tengah kartu
+                const x = (event.clientX - rect.left) / rect.width - 0.5;
+                const y = (event.clientY - rect.top) / rect.height - 0.5;
+                card.classList.add('is-tilting');
+                card.style.setProperty('--tilt-x', `${(-y * MAX_DEG * 2).toFixed(2)}deg`);
+                card.style.setProperty('--tilt-y', `${(x * MAX_DEG * 2).toFixed(2)}deg`);
+                card.style.setProperty('--shift-x', `${(x * MAX_SHIFT * 2).toFixed(1)}px`);
+                card.style.setProperty('--shift-y', `${(y * MAX_SHIFT * 2).toFixed(1)}px`);
+            });
+        });
+
+        card.addEventListener('pointerleave', () => {
+            if (frame) {
+                cancelAnimationFrame(frame);
+                frame = null;
+            }
+            card.classList.remove('is-tilting');
+            ['--tilt-x', '--tilt-y', '--shift-x', '--shift-y'].forEach((name) => card.style.removeProperty(name));
+        });
+    });
+}
+
+initTilt();
 
 Alpine.plugin(focus);
 window.Alpine = Alpine;

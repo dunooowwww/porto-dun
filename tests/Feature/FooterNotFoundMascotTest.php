@@ -58,21 +58,22 @@ class FooterNotFoundMascotTest extends TestCase
         MascotMessage::firstWhere('section', 'garage')->update(['message' => 'Bubble garage dari admin']);
 
         $this->get('/')
-            ->assertSee('Sembunyikan maskot')
-            ->assertSee('Bubble garage dari admin');
+            ->assertSee('x-data="mascot(', false)
+            ->assertSee('Bubble garage dari admin')
+            ->assertDontSee('Sembunyikan maskot');
     }
 
     public function test_mascot_is_hidden_when_there_are_no_messages(): void
     {
         MascotMessage::query()->delete();
 
-        $this->get('/')->assertOk()->assertDontSee('Sembunyikan maskot');
+        $this->get('/')->assertOk()->assertDontSee('x-data="mascot(', false);
     }
 
     public function test_mascot_only_appears_on_home_page(): void
     {
         $project = Project::first();
 
-        $this->get('/projects/'.$project->slug)->assertOk()->assertDontSee('Sembunyikan maskot');
+        $this->get('/projects/'.$project->slug)->assertOk()->assertDontSee('x-data="mascot(', false);
     }
 }
