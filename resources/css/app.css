@@ -92,6 +92,12 @@
     transition-property: color, background-color, border-color, translate, transform;
 }
 
+/* Pola checkered (bendera finish) dari token ink + card. Ukuran kotak lewat --checker (default 6px). */
+@utility checkered {
+    background-image: repeating-conic-gradient(var(--color-ink) 0 25%, var(--color-card) 0 50%);
+    background-size: calc(var(--checker, 6px) * 2) calc(var(--checker, 6px) * 2);
+}
+
 /* Label telemetri: SECTOR 1, P1, LAP 03, #12 */
 @utility label-mono {
     @apply font-mono text-xs font-medium tracking-label uppercase;

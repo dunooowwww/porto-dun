@@ -8,6 +8,9 @@
 
     <x-home.race :timeline="$timeline" />
     <x-home.garage :projects="$projects" />
-    {{-- Dibangun di M6 --}}
-    <x-home.section-stub id="box-box" :title="setting('contact_title', 'Box, Box')" :intro="setting('contact_intro')" />
+    <x-home.box-box />
+
+    <x-slot:floating>
+        <x-site.mascot :messages="$mascot" />
+    </x-slot:floating>
 </x-layouts.app>
