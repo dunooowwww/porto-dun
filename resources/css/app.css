@@ -241,6 +241,30 @@
     translate: 0 0;
 }
 
+/* Kartu miring ikut kursor (initTilt di app.js; hanya mouse & tanpa reduced-motion).
+   Memakai `transform` supaya tidak bentrok dengan `translate` milik hover/reveal. */
+.tilt {
+    transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition:
+        transform 500ms var(--ease-out-race),
+        translate 300ms var(--ease-out-race),
+        border-color 300ms var(--ease-out-race);
+    will-change: transform;
+}
+
+.tilt.is-tilting {
+    transition-duration: 120ms, 300ms, 300ms;
+}
+
+.tilt [data-tilt-depth] {
+    transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0);
+    transition: transform 500ms var(--ease-out-race);
+}
+
+.tilt.is-tilting [data-tilt-depth] {
+    transition-duration: 120ms;
+}
+
 /* Bendera checkered sukses form: naik lalu berkibar sekali. */
 .flag-wave {
     transform-origin: 0 100%;
@@ -282,6 +306,11 @@
 
     .flag-wave {
         animation: none;
+    }
+
+    .tilt,
+    .tilt [data-tilt-depth] {
+        transform: none;
     }
 }
 
