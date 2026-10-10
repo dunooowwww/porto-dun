@@ -15,6 +15,13 @@ class SiteCache
 {
     public const VERSION_KEY = 'site_cache_version';
 
+    /**
+     * Naikkan angka ini setiap kali bentuk data yang di-cache berubah (misalnya FrontData menambah key baru).
+     * Tanpa ini, cache lama dari versi kode sebelumnya tetap terbaca setelah update dan view bisa error
+     * "Undefined array key". Riwayat: 2 = stint Race Progress punya 'dialog' & 'logo'.
+     */
+    public const SCHEMA = 2;
+
     public static function remember(string $key, Closure $callback): mixed
     {
         return Cache::rememberForever(static::key($key), $callback);
@@ -22,7 +29,7 @@ class SiteCache
 
     public static function key(string $key): string
     {
-        return 'site:v'.static::version().':'.$key;
+        return 'site:s'.self::SCHEMA.':v'.static::version().':'.$key;
     }
 
     public static function version(): int

@@ -9,7 +9,9 @@ use App\Filament\Resources\Experiences\Pages\ListExperiences;
 use App\Models\Experience;
 use App\Models\User;
 use App\Support\FrontData;
+use App\Support\SiteCache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -176,5 +178,20 @@ class RaceStrategyTest extends TestCase
             ->assertSee('Pencapaian')
             ->assertSee(trim($long))
             ->assertSee('aria-label="Tutup detail"', false);
+    }
+
+    public function test_cache_from_older_code_version_is_ignored(): void
+    {
+        $this->stint('Studio Contoh', ExperienceType::Magang, '2025-01-01', '2025-06-01');
+
+        // Bentuk data lama (sebelum ada key 'dialog') yang tersimpan dengan key cache versi kode sebelumnya.
+        $oldKey = 'site:v'.SiteCache::version().':front.race.'.now()->format('Y-m');
+        Cache::forever($oldKey, [[
+            'key' => 'professional', 'race' => 'Main race', 'label' => 'Profesional', 'years' => [2025],
+            'stints' => [['number' => 1, 'organization' => 'Lama', 'role' => 'x', 'type' => null, 'period' => '',
+                'duration' => '', 'current' => false, 'achievement' => null, 'left' => 0, 'width' => 10]],
+        ]]);
+
+        $this->get('/')->assertOk()->assertSee('Studio Contoh')->assertDontSee('>Lama<', false);
     }
 }

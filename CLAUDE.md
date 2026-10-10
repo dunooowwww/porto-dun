@@ -93,7 +93,8 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 - Upload: selalu pakai `App\Filament\Support\Upload::image()` / `::pdf()` → disk `uploads`, JPG/PNG/WebP ≤ 2 MB, PDF ≤ 5 MB.
   `ImageColumn` wajib `->disk('uploads')`.
 - File lama dihapus otomatis lewat trait `DeletesUploadedFiles` di model (Filament sendiri tidak menghapusnya).
-- Cache halaman depan: pakai `App\Support\SiteCache::remember('key', fn () => ...)`. Model konten memakai trait
+- Cache halaman depan: pakai `App\Support\SiteCache::remember('key', fn () => ...)`. **Naikkan `SiteCache::SCHEMA`**
+  setiap kali bentuk array FrontData berubah (key baru), kalau tidak cache lama bikin error "Undefined array key". Model konten memakai trait
   `FlushesSiteCache`; halaman list yang bisa drag & drop memakai `App\Filament\Concerns\FlushesSiteCacheAfterReorder`
   (reorder Filament tidak memicu event model).
 - `User` mengimplementasikan `FilamentUser::canAccessPanel()` — wajib agar /admin bisa diakses di production.
