@@ -1,10 +1,15 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::get('/projects/{slug}', [ProjectController::class, 'show'])
+    ->where('slug', '[a-z0-9-]+')
+    ->name('projects.show');
 
 // PRD §5: /cv mengarah ke file CV, hanya jika CV sudah diunggah di Pengaturan Situs.
 Route::get('/cv', function () {

@@ -40,10 +40,14 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
 ## Struktur penting
 - `resources/views/components/layouts/app.blade.php` — layout utama: meta SEO/OG dari `setting()` (bisa ditimpa
   lewat props `title`, `description`, `image`), skip link, slot `header`, `<main id="konten">`
-- `resources/views/home.blade.php` + `app/Http/Controllers/HomeController.php` — halaman depan; data DB lewat `SiteCache`
+- `resources/views/home.blade.php` + `app/Http/Controllers/HomeController.php` — halaman depan
+- `App\Support\FrontData` — data publik (pitWall, timeline, garage) sebagai array, ter-cache lewat `SiteCache`.
+  Posisi P1, P2, … dan navigasi sebelumnya/berikutnya mengikuti urutan `FrontData::garage()`.
+- `resources/views/projects/show.blade.php` + `ProjectController` — detail `/projects/{slug}` (route `projects.show`);
+  draft hanya untuk admin login (+ `noindex`), slug salah → 404
 - `resources/views/components/site/` — `navbar` (Alpine `navbar()` di `resources/js/app.js`), `icon`
-- `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `section-heading`,
-  `section-stub` (kerangka sementara Race/Garage/Box Box sampai M5/M6)
+- `resources/views/components/home/` — `hero`, `hero-name`, `pit-wall`, `race`, `garage`, `section-heading`,
+  `section-stub` (kerangka sementara Box Box sampai M6)
 - `App\Support\Sections::NAV` — id section ↔ label menu (dipakai navbar & maskot)
 - `public/images/` — gambar maskot, PNG asli + WebP (pakai WebP di `<img>`):
   `hero`, `ai-ml`, `builder`, `team`, `strategy`, `race`, `garage`, `contact`, `dnf`, `mascot-head`
@@ -74,9 +78,8 @@ Jangan hardcode hex, nama font, atau radius di Blade. Teks kecil merah pakai `te
   (reorder Filament tidak memicu event model).
 - `User` mengimplementasikan `FilamentUser::canAccessPanel()` — wajib agar /admin bisa diakses di production.
 - Pesan validasi Indonesia ada di `lang/id/validation.php`.
-- Catatan untuk M5: kolom `projects.process` berisi HTML dari RichEditor → tampilkan dengan
-  `{!! str($project->process)->sanitizeHtml() !!}`. Tombol "Preview" admin membuka `/projects/{slug}`;
-  halaman detail sebaiknya tetap bisa menampilkan project draft untuk admin yang sedang login.
+- Kolom `projects.process` berisi HTML dari RichEditor → selalu tampilkan dengan
+  `{!! str($project->process)->sanitizeHtml() !!}` di dalam `.prose-case`. Teks biasa: `{!! nl2br(e($teks)) !!}`.
 
 ## Perintah penting
 ```bash
@@ -108,7 +111,7 @@ vendor/bin/pint                    # rapikan format kode PHP
 - Fokus keyboard: aturan `:focus-visible` sengaja di luar `@layer` di app.css (utilitas Tailwind v4 menang atas
   layer base). Jangan pindahkan ke `@layer base`.
 - Section memakai `scroll-mt-24` agar judul tidak tertutup navbar; link navbar berbentuk `url('/').'#id'`.
-- Gambar upload: beri `width`/`height` (lihat `HomeController::imageSize`) dan `loading="lazy"` kecuali hero.
+- Gambar upload: beri `width`/`height` (helper `upload_image_size($path)`) dan `loading="lazy"` kecuali hero.
 
 ## Definition of Done tiap milestone
 Ikuti design.md (termasuk DILARANG), cek di lebar 360px dan 1280px, tidak ada error di console

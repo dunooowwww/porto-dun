@@ -25,3 +25,21 @@ if (! function_exists('upload_url')) {
         return $path ? Storage::disk('uploads')->url($path) : null;
     }
 }
+
+if (! function_exists('upload_image_size')) {
+    /**
+     * Ukuran asli gambar di disk "uploads" untuk atribut width/height (mencegah layout bergeser).
+     *
+     * @return array{0: int, 1: int}|null
+     */
+    function upload_image_size(?string $path): ?array
+    {
+        if (blank($path) || ! Storage::disk('uploads')->exists($path)) {
+            return null;
+        }
+
+        $size = @getimagesize(Storage::disk('uploads')->path($path));
+
+        return $size ? [$size[0], $size[1]] : null;
+    }
+}

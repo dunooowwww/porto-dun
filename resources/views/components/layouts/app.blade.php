@@ -3,6 +3,7 @@
     'description' => null,
     'image' => null,
     'type' => 'website',
+    'noindex' => false,
 ])
 
 @php
@@ -23,6 +24,9 @@
         <meta name="description" content="{{ $metaDescription }}">
     @endif
     <link rel="canonical" href="{{ url()->current() }}">
+    @if ($noindex)
+        <meta name="robots" content="noindex, nofollow">
+    @endif
 
     <meta property="og:type" content="{{ $type }}">
     <meta property="og:site_name" content="{{ $siteTitle }}">
