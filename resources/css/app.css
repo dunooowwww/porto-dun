@@ -1,0 +1,107 @@
+/*
+ * Satu-satunya sumber token desain (lihat _bahan/design.md bagian 2–4).
+ * Jangan hardcode hex / font / radius di Blade — pakai kelas Tailwind dari token di bawah,
+ * misalnya: bg-bg, bg-card, text-ink, text-muted, border-line, text-red, text-red-dark,
+ * font-display, font-sans, font-mono, rounded-card, rounded-pill, rounded-chip.
+ */
+
+/* Font di-bundle lewat Vite (self-hosted, font-display: swap) — tidak butuh CDN. */
+@import '@fontsource-variable/archivo/wght.css';
+@import '@fontsource-variable/archivo/wght-italic.css';
+@import '@fontsource-variable/inter/index.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
+
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    /* Hapus palet bawaan Tailwind supaya hanya 7 warna design.md yang bisa dipakai. */
+    --color-*: initial;
+    --color-bg: #f7f7f5;
+    --color-card: #ffffff;
+    --color-ink: #111111;
+    --color-muted: #6b6b6b;
+    --color-line: #e6e6e3;
+    --color-red: #e10600;
+    --color-red-dark: #b80500;
+
+    /* Maksimal 3 font. */
+    --font-display: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+    --tracking-display: -0.03em;
+    --tracking-label: 0.08em;
+
+    /* Radius konsisten: kartu 24px, tombol/pill 999px, elemen kecil 12px. */
+    --radius-card: 24px;
+    --radius-pill: 999px;
+    --radius-chip: 12px;
+
+    --container-site: 1200px;
+
+    --ease-out-race: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        @apply bg-bg font-sans text-ink antialiased;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        @apply font-display font-extrabold tracking-display text-ink;
+        line-height: 1.05;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    /* Fokus keyboard terlihat: outline merah. */
+    :focus-visible {
+        outline: 2px solid var(--color-red);
+        outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+/* Label telemetri: SECTOR 1, P1, LAP 03, #12 */
+@utility label-mono {
+    @apply font-mono text-xs font-medium tracking-label uppercase;
+}
+
+@layer components {
+    /* Tombol utama: hitam, pill, detail kecil merah (bukan tombol merah penuh). */
+    .btn-primary {
+        @apply inline-flex items-center gap-3 rounded-pill bg-ink px-6 py-3 font-sans text-sm font-semibold text-card transition duration-200 ease-out-race hover:-translate-y-0.5;
+    }
+
+    .btn-primary .btn-dot {
+        @apply size-2 rounded-pill bg-red;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center gap-3 rounded-pill border border-line bg-card px-6 py-3 font-sans text-sm font-semibold text-ink transition duration-200 ease-out-race hover:-translate-y-0.5 hover:border-ink;
+    }
+}
